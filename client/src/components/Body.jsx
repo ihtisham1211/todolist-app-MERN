@@ -141,17 +141,15 @@ export class Body extends Component {
                     >
                         <FaExchangeAlt/>
                     </ThemeBtn>
-                    <UserName>
-                        {
-                            this.props.username
-                        }
-                    </UserName>
                     <LogoutBtn
                         mode={this.props.theme ? 1 : 0}
                         onClick={() => this.props.logout()}
                     >
                         <AiOutlineLogout/>
                     </LogoutBtn>
+                    <UserName>
+                        {this.props.username}
+                    </UserName>
                 </BtnDiv>
 
                 <Date day={this.state.selectedDate.getDay()}

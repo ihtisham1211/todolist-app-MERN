@@ -15,7 +15,9 @@ const DayStyle = styled.div`
   margin-right: 250px;
 `;
 const TaskStyle = styled.div`
-  position: center;
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
   color: #ac8eca;
 `;
 const ButtonStyle = styled.button`
@@ -65,8 +67,8 @@ export class Date extends Component {
                     </DayStyle>
                 </div>
                 <TaskStyle>
-                    <b>{this.props.taskList === null ? 0 : this.props.taskList.length}</b>{" "}
-                    Tasks
+                    <b>{this.props.taskList === null ? 0 : this.props.taskList.length} Tasks</b>
+
                     <ButtonStyle
                         mode={this.props.theme ? 1 : 0}
                         onClick={(e) =>
