@@ -38,8 +38,6 @@ export const getAllTasks = (userId, day, month, year) => async (dispatch) => {
             let d = task.date.split("|")[1].split('/')[0];
             let m = task.date.split("|")[1].split('/')[1];
             let y = task.date.split("|")[1].split('/')[2];
-            console.log(d, m, y);
-            console.log(day, month, year);
             if (task.user === userId && d == day && m == month && y == year) {
                 tasks.push(task);
             }
