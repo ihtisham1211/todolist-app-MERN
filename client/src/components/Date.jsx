@@ -15,8 +15,8 @@ const DayStyle = styled.div`
   margin-right: 250px;
 `;
 const TaskStyle = styled.div`
+  position: center;
   color: #ac8eca;
-  margin-left: 10px;
 `;
 const ButtonStyle = styled.button`
   background-color: #ec4d5b;

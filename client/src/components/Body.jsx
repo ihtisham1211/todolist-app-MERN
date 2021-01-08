@@ -15,7 +15,7 @@ import {
 } from '@material-ui/pickers';
 import {getCurrentDate} from '../utils/dateFunction'
 import "date-fns";
-import './body.css';
+import {BiCalendar} from "react-icons/bi";
 
 const BodyStyle = styled.div`
   display: flex;
@@ -60,6 +60,17 @@ const ThemeBtn = styled.button`
   background-color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
   font-size: 20px;
 `;
+const CalBtn = styled.button`
+  &:hover {
+    color: #cc4c43;
+  }
+
+  border: none;
+  color: #ac8eca;
+  background-color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
+  font-size: 20px;
+`;
+
 const UserName = styled.h5`
   color: #ac8eca;
   text-transform: uppercase;
@@ -74,6 +85,7 @@ export class Body extends Component {
         super(props);
         this.state = {
             selectedDate: getCurrentDate(),
+            isOpen: false,
         };
     }
 
@@ -86,6 +98,12 @@ export class Body extends Component {
         this.setState({
             selectedDate: date,
         })
+    }
+
+    setIsOpen(cond) {
+        this.setState({
+            isOpen: cond,
+        });
     }
 
     componentDidMount() {
@@ -102,13 +120,21 @@ export class Body extends Component {
                 <BtnDiv>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
+                            open={this.state.isOpen}
+                            onOpen={() => this.setIsOpen(true)}
+                            onClose={() => this.setIsOpen(false)}
                             disableToolbar
                             variant="inline"
                             format="dd/MM/yyyy"
+                            InputProps={{disableUnderline: true}}
+                            TextFieldComponent={() => null}
                             value={this.state.selectedDate}
                             onChange={(date) => this.handleDateChange(date)}
                         />
                     </MuiPickersUtilsProvider>
+                    <CalBtn mode={this.props.theme ? 1 : 0}
+                            onClick={() => this.setIsOpen(true)}>
+                        <BiCalendar/></CalBtn>
                     <ThemeBtn
                         mode={this.props.theme ? 1 : 0}
                         onClick={() => this.props.themeChange(this.props.theme)}
