@@ -1,0 +1,21 @@
+/*.MuiInputBase-input{*/
+/*    display: none;*/
+/*    visibility: hidden;*/
+/*    size:0;*/
+/*    maxlength:0;*/
+
+/*}*/
+/*.MuiIconButton-root {*/
+/*    color: #ac8eca;*/
+/*    font-size: 1.5rem;*/
+/*    text-align: center;*/
+/*}*/
+
+/*.MuiInput-underline::before{*/
+/*        display: none;*/
+/*    visibility: hidden;*/
+/*}*/
+/*.MuiInput-underline::after{*/
+/*        display: none;*/
+/*    visibility: hidden;*/
+/*}*/
