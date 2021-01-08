@@ -15,7 +15,7 @@ export const loadUser = () => async (dispatch) => {
     }
 
     try {
-        const res = await axios.get("/api/auth");
+        const res = await axios.get("https://todolist-demo-ihtisham1211.herokuapp.com//api/auth");
         dispatch({type: "SET_NAME", payload: res.data.name});
         dispatch({
             type: USER_LOADED,
@@ -39,7 +39,7 @@ export const login = (email, password) => async (dispatch) => {
     const body = JSON.stringify({email, password});
 
     try {
-        const res = await axios.post("/api/auth", body, config);
+        const res = await axios.post("https://todolist-demo-ihtisham1211.herokuapp.com//api/auth", body, config);
 
         dispatch({
             type: LOGIN_SUCCESS,
