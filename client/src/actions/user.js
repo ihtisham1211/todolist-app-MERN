@@ -2,6 +2,7 @@ import axios from "axios";
 import {CREATED_USER, FAILED_USER} from "./types";
 import {setAlert} from "./alert";
 import {login} from "./auth";
+import {url} from "../utils/proxy";
 
 export const createUser = (name, email, password) => async (dispatch) => {
     const config = {
@@ -12,7 +13,7 @@ export const createUser = (name, email, password) => async (dispatch) => {
     const body = JSON.stringify({name, email, password});
 
     try {
-        const res = await axios.post("/api/user/add", body, config);
+        const res = await axios.post(url+"/api/user/add", body, config);
         dispatch({
             type: CREATED_USER,
         });

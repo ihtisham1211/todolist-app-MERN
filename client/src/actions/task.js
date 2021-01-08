@@ -1,5 +1,6 @@
 import axios from "axios";
 import {setAlert} from "./alert";
+import {url} from "../utils/proxy";
 //**********************************
 //***********storeUserId
 //**********************************
@@ -11,7 +12,7 @@ export const storeUserId = (token, day, month, year) => async (dispatch) => {
         },
     };
     try {
-        const res = await axios.get("/api/auth/", config);
+        const res = await axios.get(url+"/api/auth/", config);
         dispatch({
             type: "ADD_USER_ID",
             payload: res.data._id,
@@ -32,7 +33,7 @@ export const getAllTasks = (userId, day, month, year) => async (dispatch) => {
         },
     };
     try {
-        const res = await axios.get("/api/task/", config);
+        const res = await axios.get(url+"/api/task/", config);
         let tasks = [];
         const userTask = res.data.map((task) => {
             let d = task.date.split("|")[1].split('/')[0];
@@ -84,7 +85,7 @@ export const addTask = (
     };
     const body = JSON.stringify({title, date, description, status});
     try {
-        const res = await axios.post("/api/task/add", body, config);
+        const res = await axios.post(url+"/api/task/add", body, config);
 
         dispatch(getAllTasks(user, day, month, year));
         console.log("addTask");
@@ -121,7 +122,7 @@ export const updateTask = (
     };
     const body = JSON.stringify({title, date, description, status});
     try {
-        const res = await axios.patch("/api/task/" + id, body, config);
+        const res = await axios.patch(url+"/api/task/" + id, body, config);
         console.log("updateTask");
         dispatch(getAllTasks(user, day, month, year));
     } catch (error) {
@@ -140,7 +141,7 @@ export const deleteTask = (token, id, user, day, month, year) => async (dispatch
     };
 
     try {
-        const res = await axios.delete("/api/task/" + id, config);
+        const res = await axios.delete(url+"/api/task/" + id, config);
         console.log("deleteTask");
         dispatch(getAllTasks(user, day, month, year));
     } catch (error) {
