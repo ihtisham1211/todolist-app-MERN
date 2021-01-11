@@ -91,6 +91,7 @@ router.patch('/:id',auth,async (req,res)=>{
         },
       }
   );
+  res.json(upUser);
   }
   catch (e) {
     console.error(error.message);
