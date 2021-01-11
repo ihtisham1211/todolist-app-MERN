@@ -17,12 +17,17 @@ export const loadUser = () => async (dispatch) => {
 
     try {
         const res = await axios.get(url+"/api/auth");
-        dispatch({type: "SET_NAME", payload: res.data.name});
+        localStorage.setItem('name',res.data.name);
+       localStorage.setItem('id',res.data._id);
+       localStorage.setItem('email',res.data.email);
+       localStorage.setItem('image',res.data.image);
         dispatch({
             type: USER_LOADED,
             payload: res.data,
         });
-        dispatch(setAlert("LOGIN SUCCESSFULL", "success"))
+        dispatch({
+            type: "SET_NAME_AND_IMAGE",
+        });
     } catch (error) {
         dispatch({
             type: AUTH_ERROR,
@@ -48,7 +53,6 @@ export const login = (email, password) => async (dispatch) => {
         });
 
         dispatch(loadUser());
-
     } catch (error) {
         const errors = error.response.data.errors;
         if (errors) {
@@ -61,6 +65,7 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
+    localStorage.clear();
     dispatch({
         type: LOGOUT,
     });

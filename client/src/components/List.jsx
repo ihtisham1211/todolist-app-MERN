@@ -17,7 +17,7 @@ const ButtonBox = styled.div`
   margin: 5px 0px 8px 0px;
 `;
 const TextBox = styled.input`
-  &::focus {
+  &:focus {
     color: ${(props) => (props.mode ? "#ac8eca" : "#ac8eca")};
   }
 

@@ -1,7 +1,10 @@
-const initialState = {created: false, theme: true, name: ""};
+const initialState = {created: false,
+    theme: true,
+    name: localStorage.getItem('name'),
+    image: localStorage.getItem('image')};
 
 export default function (state = initialState, action) {
-    const {type, payload} = action;
+    const {type} = action;
     //action has the coming data init
     switch (type) {
         case "CREATED_USER":
@@ -24,11 +27,12 @@ export default function (state = initialState, action) {
                 ...state,
                 theme: false,
             };
-        case "SET_NAME":
+        case "SET_NAME_AND_IMAGE":
             return {
                 ...state,
-                name: payload,
-            }
+                name: localStorage.getItem('name'),
+                 image: localStorage.getItem('image'),
+            };
         default:
             return state;
     }

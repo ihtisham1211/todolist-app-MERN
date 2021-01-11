@@ -35,6 +35,7 @@ router.post(
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
+        image:"",
       });
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
@@ -70,5 +71,31 @@ router.delete("/:id", auth, async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+//@route UPDATE api/users
+//@desc update user
+//@access private
+router.patch('/:id',auth,async (req,res)=>{
+  try{
+    const salt = await bcrypt.genSalt(10);
+    const password  = await bcrypt.hash(req.body.password, salt);
+
+  const upUser = await User.updateOne(
+      {_id:req.params.id},
+      {
+        $set:{
+          name: req.body.name,
+          email:req.body.email,
+          password: password,
+          image: req.body.image,
+        },
+      }
+  );
+  }
+  catch (e) {
+    console.error(error.message);
+    res.status(500).send("unable to update user");
+  }
+})
 
 module.exports = router;

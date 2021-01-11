@@ -22,15 +22,15 @@ const BodyStyle = styled.div`
   flex-direction: column;
   justify-content: start;
   width: 500px;
-  height: 650px;
+  height: 680px;
   background: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
-  margin: 100px auto;
+  margin: 50px auto;
   border-radius: 10px;
   padding: 25px;
 `;
 const InspiredText = styled.a`
   position: absolute;
-  margin: 620px auto auto 180px;
+  margin: 650px auto auto 180px;
   color: #ac8eca;
 `;
 const ReactText = styled.span`
@@ -71,11 +71,37 @@ const CalBtn = styled.button`
   font-size: 20px;
 `;
 
-const UserName = styled.h5`
-  color: #ac8eca;
+
+const UserBadge = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 10px 0 auto;
+  background-color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
+  border-radius: 30px;
+  width: 180px;
+`
+
+const UserImage = styled.img`
+  display: block;
+  height: 60px;
+  width: 60px;
+  margin: 0 0 0 10px;
+  border-radius: 30px;
+`
+const UserTag = styled.button`
+  &:hover {
+    color: #cc4c43;
+  }
+
+  border: none;
+  background-color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
   text-transform: uppercase;
-  margin: 0 3px 0 3px;
-`;
+  margin-left: auto;
+  font-weight: bolder;
+  color: #ac8eca;
+  border-radius: 30vh;
+
+`
 //**************************
 //Styles
 //**************************
@@ -100,10 +126,19 @@ export class Body extends Component {
         })
     }
 
+    routeChange(path) {
+        this.props.history.push(path);
+    }
+
     setIsOpen(cond) {
         this.setState({
             isOpen: cond,
         });
+    }
+
+    move(e) {
+        e.preventDefault();
+        this.routeChange(`/userprofile`);
     }
 
     componentDidMount() {
@@ -116,53 +151,64 @@ export class Body extends Component {
 
     render() {
         return (
-            <BodyStyle mode={this.props.theme ? 1 : 0}>
-                <BtnDiv>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                            open={this.state.isOpen}
-                            onOpen={() => this.setIsOpen(true)}
-                            onClose={() => this.setIsOpen(false)}
-                            disableToolbar
-                            variant="inline"
-                            format="dd/MM/yyyy"
-                            InputProps={{disableUnderline: true}}
-                            TextFieldComponent={() => null}
-                            value={this.state.selectedDate}
-                            onChange={(date) => this.handleDateChange(date)}
-                        />
-                    </MuiPickersUtilsProvider>
-                    <CalBtn mode={this.props.theme ? 1 : 0}
-                            onClick={() => this.setIsOpen(true)}>
-                        <BiCalendar/></CalBtn>
-                    <ThemeBtn
+            <div>
+                <UserBadge mode={this.props.theme ? 1 : 0}>
+                    <UserTag
                         mode={this.props.theme ? 1 : 0}
-                        onClick={() => this.props.themeChange(this.props.theme)}
-                    >
-                        <FaExchangeAlt/>
-                    </ThemeBtn>
-                    <LogoutBtn
-                        mode={this.props.theme ? 1 : 0}
-                        onClick={() => this.props.logout()}
-                    >
-                        <AiOutlineLogout/>
-                    </LogoutBtn>
-                    <UserName>
-                        {this.props.username}
-                    </UserName>
-                </BtnDiv>
+                        onClick={(e) => this.move(e)}>{this.props.username}</UserTag>
+                    {this.props.img.length === 0 ?
+                        <UserImage alt=' '
+                                   src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"/>
+                        :
+                        <UserImage alt=' ' src={this.props.img}/>}
 
-                <Date day={this.state.selectedDate.getDay()}
-                      date={this.state.selectedDate.getDate()}
-                      month={this.state.selectedDate.getMonth()}/>
+                </UserBadge>
+                <BodyStyle mode={this.props.theme ? 1 : 0}>
+                    <BtnDiv>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                                open={this.state.isOpen}
+                                onOpen={() => this.setIsOpen(true)}
+                                onClose={() => this.setIsOpen(false)}
+                                disableToolbar
+                                variant="inline"
+                                format="dd/MM/yyyy"
+                                InputProps={{disableUnderline: true}}
+                                TextFieldComponent={() => null}
+                                value={this.state.selectedDate}
+                                onChange={(date) => this.handleDateChange(date)}
+                            />
+                        </MuiPickersUtilsProvider>
+                        <CalBtn mode={this.props.theme ? 1 : 0}
+                                onClick={() => this.setIsOpen(true)}>
+                            <BiCalendar/></CalBtn>
+                        <ThemeBtn
+                            mode={this.props.theme ? 1 : 0}
+                            onClick={() => this.props.themeChange(this.props.theme)}
+                        >
+                            <FaExchangeAlt/>
+                        </ThemeBtn>
+                        <LogoutBtn
+                            mode={this.props.theme ? 1 : 0}
+                            onClick={() => this.props.logout()}
+                        >
+                            <AiOutlineLogout/>
+                        </LogoutBtn>
+                    </BtnDiv>
 
-                <List years={this.state.selectedDate.getFullYear()}
-                      day={this.state.selectedDate.getDate()}
-                      month={this.state.selectedDate.getMonth()}/>
-                <InspiredText>
-                    Inspired by <ReactText>React</ReactText>
-                </InspiredText>
-            </BodyStyle>
+                    <Date day={this.state.selectedDate.getDay()}
+                          date={this.state.selectedDate.getDate()}
+                          month={this.state.selectedDate.getMonth()}/>
+
+                    <List years={this.state.selectedDate.getFullYear()}
+                          day={this.state.selectedDate.getDate()}
+                          month={this.state.selectedDate.getMonth()}/>
+                    <InspiredText>
+                        Inspired by <ReactText>React</ReactText>
+                    </InspiredText>
+                </BodyStyle>
+            </div>
+
         );
     }
 }
@@ -172,6 +218,7 @@ const mapStateToProps = (state) => ({
     userId: state.task.userId,
     theme: state.user.theme,
     username: state.user.name,
+    img: state.user.image,
 });
 
 export default connect(mapStateToProps, {

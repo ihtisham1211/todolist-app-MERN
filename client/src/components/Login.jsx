@@ -15,6 +15,8 @@ const LoginForm = styled.form`
 `;
 const TextBox = styled.input`
   margin: 10px;
+  height: 20px;
+  border: solid 1px #ac8eca;
 `;
 const BtnBox = styled.button`
   margin: 10px;

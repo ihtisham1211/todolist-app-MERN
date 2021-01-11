@@ -1,6 +1,6 @@
 const initialState = {
     taskList: null,
-    userId: null,
+    userId: localStorage.getItem('id'),
 };
 
 export default function (state = initialState, action) {

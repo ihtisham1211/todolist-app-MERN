@@ -1,9 +1,12 @@
 import axios from "axios";
-import {CREATED_USER, FAILED_USER} from "./types";
+import { CREATED_USER, FAILED_USER} from "./types";
 import {setAlert} from "./alert";
 import {login} from "./auth";
 import {url} from "../utils/proxy";
 
+//**********************************
+//***********createUser
+//**********************************
 export const createUser = (name, email, password) => async (dispatch) => {
     const config = {
         headers: {
@@ -27,6 +30,31 @@ export const createUser = (name, email, password) => async (dispatch) => {
     }
 };
 
+//**********************************
+//***********updateUser
+//**********************************
+
+export const updateUser = (id,token,name,email,password,image) => async (dispatch) =>{
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": token,
+        },
+    };
+    const body = JSON.stringify({name,email,password,image});
+
+    try {
+        const res = await axios.patch(url+"/api/user/"+id, body, config);
+        console.log("updateUser");
+        dispatch(setAlert("User Updated", "success"));
+    } catch (error) {
+        dispatch(setAlert("Failed To Updated", "danger"));
+    }
+
+}
+//**********************************
+//***********themeChange
+//**********************************
 export const themeChange = (theme) => async (dispatch) => {
     if (theme === true) {
         dispatch({
