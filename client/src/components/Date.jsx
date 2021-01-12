@@ -1,7 +1,7 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import styled from "styled-components";
-import {connect} from "react-redux";
-import {clearList} from "../actions/task";
+import { connect } from "react-redux";
+import { clearList } from "../actions/task";
 
 const DateStyle = styled.div`
   display: flex;
@@ -38,55 +38,73 @@ const MonthStyle = styled.div`
   margin-top: 10px;
 `;
 var m = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
-var d = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+var d = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 //**************************
 //Styles
 //**************************
 
 export class Date extends Component {
-    render() {
-        return (
-            <DateStyle>
-                <div>
-                    <DayStyle>
-                        <b>{d[this.props.day]},</b>{this.props.date}th
-                        <MonthStyle>{m[this.props.month]}</MonthStyle>
-                    </DayStyle>
-                </div>
-                <TaskStyle>
-                    <b>{this.props.taskList === null ? 0 : this.props.taskList.length} Tasks</b>
+  render() {
+    return (
+      <DateStyle>
+        <div>
+          <DayStyle>
+            <b>{d[this.props.day]},</b>
+            {this.props.date}th
+            <MonthStyle>{m[this.props.month]}</MonthStyle>
+          </DayStyle>
+        </div>
+        <TaskStyle>
+          <b>
+            {this.props.taskList === null ? 0 : this.props.taskList.length}{" "}
+            Tasks
+          </b>
 
-                    <ButtonStyle
-                        mode={this.props.theme ? 1 : 0}
-                        onClick={(e) =>
-                            this.props.clearList(this.props.taskList, this.props.token, this.props.day, this.props.month + 1, this.props.years)
-                        }
-                    >
-                        clear list
-                    </ButtonStyle>
-                </TaskStyle>
-            </DateStyle>
-        );
-    }
+          <ButtonStyle
+            mode={this.props.theme ? 1 : 0}
+            onClick={(e) =>
+              this.props.clearList(
+                this.props.taskList,
+                this.props.token,
+                this.props.day,
+                this.props.month + 1,
+                this.props.years
+              )
+            }
+          >
+            clear list
+          </ButtonStyle>
+        </TaskStyle>
+      </DateStyle>
+    );
+  }
 }
 
 const mapStateToProps = (state) => ({
-    taskList: state.task.taskList,
-    token: state.auth.token,
-    theme: state.user.theme,
+  taskList: state.task.taskList,
+  token: state.auth.token,
+  theme: state.user.theme,
 });
 
-export default connect(mapStateToProps, {clearList})(Date);
+export default connect(mapStateToProps, { clearList })(Date);

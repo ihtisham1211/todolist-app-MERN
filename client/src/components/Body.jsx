@@ -1,21 +1,21 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import Date from "./Date";
 import List from "./List";
 import styled from "styled-components";
-import {connect} from "react-redux";
-import {logout} from "../actions/auth";
-import {themeChange} from "../actions/user";
-import {getAllTasks, storeUserId} from "../actions/task";
-import {AiOutlineLogout} from "react-icons/ai";
-import {FaExchangeAlt} from "react-icons/fa";
-import DateFnsUtils from '@date-io/date-fns';
+import { connect } from "react-redux";
+import { logout } from "../actions/auth";
+import { themeChange } from "../actions/user";
+import { getAllTasks, storeUserId } from "../actions/task";
+import { AiOutlineLogout } from "react-icons/ai";
+import { FaExchangeAlt } from "react-icons/fa";
+import DateFnsUtils from "@date-io/date-fns";
 import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
-import {getCurrentDate} from '../utils/dateFunction'
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
+import { getCurrentDate } from "../utils/dateFunction";
 import "date-fns";
-import {BiCalendar} from "react-icons/bi";
+import { BiCalendar } from "react-icons/bi";
 
 const BodyStyle = styled.div`
   display: flex;
@@ -71,7 +71,6 @@ const CalBtn = styled.button`
   font-size: 20px;
 `;
 
-
 const UserBadge = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -79,7 +78,7 @@ const UserBadge = styled.div`
   background-color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
   border-radius: 30px;
   width: 180px;
-`
+`;
 
 const UserImage = styled.img`
   display: block;
@@ -87,7 +86,7 @@ const UserImage = styled.img`
   width: 60px;
   margin: 0 0 0 10px;
   border-radius: 30px;
-`
+`;
 const UserTag = styled.button`
   &:hover {
     color: #cc4c43;
@@ -100,130 +99,142 @@ const UserTag = styled.button`
   font-weight: bolder;
   color: #ac8eca;
   border-radius: 30vh;
-
-`
+`;
 //**************************
 //Styles
 //**************************
 
 export class Body extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            selectedDate: getCurrentDate(),
-            isOpen: false,
-        };
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedDate: getCurrentDate(),
+      isOpen: false,
+    };
+  }
 
-    handleDateChange(date) {
-        this.props.getAllTasks(
-            this.props.userId,
-            this.state.selectedDate.getDate(),
-            this.state.selectedDate.getMonth() + 1,
-            this.state.selectedDate.getFullYear());
-        this.setState({
-            selectedDate: date,
-        })
-    }
+  handleDateChange(date) {
+    this.props.getAllTasks(
+      this.props.userId,
+      this.state.selectedDate.getDate(),
+      this.state.selectedDate.getMonth() + 1,
+      this.state.selectedDate.getFullYear()
+    );
+    this.setState({
+      selectedDate: date,
+    });
+  }
 
-    routeChange(path) {
-        this.props.history.push(path);
-    }
+  routeChange(path) {
+    this.props.history.push(path);
+  }
 
-    setIsOpen(cond) {
-        this.setState({
-            isOpen: cond,
-        });
-    }
+  setIsOpen(cond) {
+    this.setState({
+      isOpen: cond,
+    });
+  }
 
-    move(e) {
-        e.preventDefault();
-        this.routeChange(`/userprofile`);
-    }
+  move(e) {
+    e.preventDefault();
+    this.routeChange(`/userprofile`);
+  }
 
-    componentDidMount() {
-        this.props.storeUserId(this.props.token,
-            this.state.selectedDate.getDate(),
-            this.state.selectedDate.getMonth() + 1,
-            this.state.selectedDate.getFullYear()
-        ); // + getAllTasks
-    }
+  componentDidMount() {
+    this.props.storeUserId(
+      this.props.token,
+      this.state.selectedDate.getDate(),
+      this.state.selectedDate.getMonth() + 1,
+      this.state.selectedDate.getFullYear()
+    ); // + getAllTasks
+  }
 
-    render() {
-        return (
-            <div>
-                <UserBadge mode={this.props.theme ? 1 : 0}>
-                    <UserTag
-                        mode={this.props.theme ? 1 : 0}
-                        onClick={(e) => this.move(e)}>{this.props.username}</UserTag>
-                    {this.props.img.length === 0 ?
-                        <UserImage alt=' '
-                                   src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"/>
-                        :
-                        <UserImage alt=' ' src={this.props.img}/>}
+  render() {
+    return (
+      <div>
+        <UserBadge mode={this.props.theme ? 1 : 0}>
+          <UserTag
+            mode={this.props.theme ? 1 : 0}
+            onClick={(e) => this.move(e)}
+          >
+            {this.props.username}
+          </UserTag>
+          {this.props.img.length === 0 || this.props.img === null ? (
+            <UserImage
+              alt=" "
+              src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
+            />
+          ) : (
+            <UserImage alt=" " src={this.props.img} />
+          )}
+        </UserBadge>
+        <BodyStyle mode={this.props.theme ? 1 : 0}>
+          <BtnDiv>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                open={this.state.isOpen}
+                onOpen={() => this.setIsOpen(true)}
+                onClose={() => this.setIsOpen(false)}
+                disableToolbar
+                variant="inline"
+                format="dd/MM/yyyy"
+                InputProps={{ disableUnderline: true }}
+                TextFieldComponent={() => null}
+                value={this.state.selectedDate}
+                onChange={(date) => this.handleDateChange(date)}
+              />
+            </MuiPickersUtilsProvider>
+            <CalBtn
+              mode={this.props.theme ? 1 : 0}
+              onClick={() => this.setIsOpen(true)}
+            >
+              <BiCalendar />
+            </CalBtn>
+            <ThemeBtn
+              mode={this.props.theme ? 1 : 0}
+              onClick={() => this.props.themeChange(this.props.theme)}
+            >
+              <FaExchangeAlt />
+            </ThemeBtn>
+            <LogoutBtn
+              mode={this.props.theme ? 1 : 0}
+              onClick={() => this.props.logout()}
+            >
+              <AiOutlineLogout />
+            </LogoutBtn>
+          </BtnDiv>
 
-                </UserBadge>
-                <BodyStyle mode={this.props.theme ? 1 : 0}>
-                    <BtnDiv>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                open={this.state.isOpen}
-                                onOpen={() => this.setIsOpen(true)}
-                                onClose={() => this.setIsOpen(false)}
-                                disableToolbar
-                                variant="inline"
-                                format="dd/MM/yyyy"
-                                InputProps={{disableUnderline: true}}
-                                TextFieldComponent={() => null}
-                                value={this.state.selectedDate}
-                                onChange={(date) => this.handleDateChange(date)}
-                            />
-                        </MuiPickersUtilsProvider>
-                        <CalBtn mode={this.props.theme ? 1 : 0}
-                                onClick={() => this.setIsOpen(true)}>
-                            <BiCalendar/></CalBtn>
-                        <ThemeBtn
-                            mode={this.props.theme ? 1 : 0}
-                            onClick={() => this.props.themeChange(this.props.theme)}
-                        >
-                            <FaExchangeAlt/>
-                        </ThemeBtn>
-                        <LogoutBtn
-                            mode={this.props.theme ? 1 : 0}
-                            onClick={() => this.props.logout()}
-                        >
-                            <AiOutlineLogout/>
-                        </LogoutBtn>
-                    </BtnDiv>
+          <Date
+            day={this.state.selectedDate.getDay()}
+            date={this.state.selectedDate.getDate()}
+            month={this.state.selectedDate.getMonth()}
+          />
 
-                    <Date day={this.state.selectedDate.getDay()}
-                          date={this.state.selectedDate.getDate()}
-                          month={this.state.selectedDate.getMonth()}/>
-
-                    <List years={this.state.selectedDate.getFullYear()}
-                          day={this.state.selectedDate.getDate()}
-                          month={this.state.selectedDate.getMonth()}/>
-                    <InspiredText>
-                        Inspired by <ReactText>React</ReactText>
-                    </InspiredText>
-                </BodyStyle>
-            </div>
-
-        );
-    }
+          <List
+            years={this.state.selectedDate.getFullYear()}
+            day={this.state.selectedDate.getDate()}
+            month={this.state.selectedDate.getMonth()}
+          />
+          <InspiredText>
+            Inspired by <ReactText>React</ReactText>
+          </InspiredText>
+        </BodyStyle>
+      </div>
+    );
+  }
 }
 
 const mapStateToProps = (state) => ({
-    token: state.auth.token,
-    userId: state.task.userId,
-    theme: state.user.theme,
-    username: state.user.name,
-    img: state.user.image,
+  token: state.auth.token,
+  userId: state.task.userId,
+  theme: state.user.theme,
+  username: state.user.name,
+  img: state.user.image,
 });
 
 export default connect(mapStateToProps, {
-    logout,
-    storeUserId,
-    themeChange,
-    getAllTasks
+  logout,
+  storeUserId,
+  themeChange,
+  getAllTasks,
 })(Body);
