@@ -1,6 +1,9 @@
+import { AUTH_ERROR, LOGIN_FAIL, LOGOUT } from "../actions/types";
+
 const initialState = {
   created: false,
   theme: true,
+  loading: false,
   name: localStorage.getItem("name"),
   image: localStorage.getItem("image"),
 };
@@ -32,8 +35,15 @@ export default function (state = initialState, action) {
     case "SET_NAME_AND_IMAGE":
       return {
         ...state,
+        loading: true,
         name: localStorage.getItem("name"),
         image: localStorage.getItem("image"),
+      };
+    case AUTH_ERROR:
+    case LOGIN_FAIL:
+    case LOGOUT:
+      return {
+        loading: false,
       };
     default:
       return state;

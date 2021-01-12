@@ -100,6 +100,29 @@ const UserTag = styled.button`
   color: #ac8eca;
   border-radius: 30vh;
 `;
+const Loading = styled.div`
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  &::after {
+    content: " ";
+    display: block;
+    width: 20vh;
+    height: 20vh;
+    margin: 35vh auto;
+    border-radius: 50%;
+    border: 6px solid whitesmoke;
+    border-color: whitesmoke transparent whitesmoke transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+  display: flex;
+  margin: auto;
+`;
 //**************************
 //Styles
 //**************************
@@ -151,79 +174,81 @@ export class Body extends Component {
 
   render() {
     return (
-      <div>
-        <UserBadge mode={this.props.theme ? 1 : 0}>
-          <UserTag
-            mode={this.props.theme ? 1 : 0}
-            onClick={(e) => this.move(e)}
-          >
-            {this.props.username}
-          </UserTag>
-          {/*{this.props.img.length === 0 || this.props.img === null ? (*/}
-          {/*  <UserImage*/}
-          {/*    alt=" "*/}
-          {/*    src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"*/}
-          {/*  />*/}
-          {/*) : (*/}
-          {/*  <UserImage alt=" " src={this.props.img} />*/}
-          {/*)}*/}
-             <UserImage
-              alt=" "
-              src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
-            />
-        </UserBadge>
-        <BodyStyle mode={this.props.theme ? 1 : 0}>
-          <BtnDiv>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                open={this.state.isOpen}
-                onOpen={() => this.setIsOpen(true)}
-                onClose={() => this.setIsOpen(false)}
-                disableToolbar
-                variant="inline"
-                format="dd/MM/yyyy"
-                InputProps={{ disableUnderline: true }}
-                TextFieldComponent={() => null}
-                value={this.state.selectedDate}
-                onChange={(date) => this.handleDateChange(date)}
+      <>
+        {this.props.loading ? (
+          <div>
+            <UserBadge mode={this.props.theme ? 1 : 0}>
+              <UserTag
+                mode={this.props.theme ? 1 : 0}
+                onClick={(e) => this.move(e)}
+              >
+                {this.props.username}
+              </UserTag>
+              {this.props.img.length === 0 || this.props.img === null ? (
+                <UserImage
+                  alt=" "
+                  src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
+                />
+              ) : (
+                <UserImage alt=" " src={this.props.img} />
+              )}
+            </UserBadge>
+            <BodyStyle mode={this.props.theme ? 1 : 0}>
+              <BtnDiv>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    open={this.state.isOpen}
+                    onOpen={() => this.setIsOpen(true)}
+                    onClose={() => this.setIsOpen(false)}
+                    disableToolbar
+                    variant="inline"
+                    format="dd/MM/yyyy"
+                    InputProps={{ disableUnderline: true }}
+                    TextFieldComponent={() => null}
+                    value={this.state.selectedDate}
+                    onChange={(date) => this.handleDateChange(date)}
+                  />
+                </MuiPickersUtilsProvider>
+                <CalBtn
+                  mode={this.props.theme ? 1 : 0}
+                  onClick={() => this.setIsOpen(true)}
+                >
+                  <BiCalendar />
+                </CalBtn>
+                <ThemeBtn
+                  mode={this.props.theme ? 1 : 0}
+                  onClick={() => this.props.themeChange(this.props.theme)}
+                >
+                  <FaExchangeAlt />
+                </ThemeBtn>
+                <LogoutBtn
+                  mode={this.props.theme ? 1 : 0}
+                  onClick={() => this.props.logout()}
+                >
+                  <AiOutlineLogout />
+                </LogoutBtn>
+              </BtnDiv>
+
+              <Date
+                day={this.state.selectedDate.getDay()}
+                date={this.state.selectedDate.getDate()}
+                month={this.state.selectedDate.getMonth()}
               />
-            </MuiPickersUtilsProvider>
-            <CalBtn
-              mode={this.props.theme ? 1 : 0}
-              onClick={() => this.setIsOpen(true)}
-            >
-              <BiCalendar />
-            </CalBtn>
-            <ThemeBtn
-              mode={this.props.theme ? 1 : 0}
-              onClick={() => this.props.themeChange(this.props.theme)}
-            >
-              <FaExchangeAlt />
-            </ThemeBtn>
-            <LogoutBtn
-              mode={this.props.theme ? 1 : 0}
-              onClick={() => this.props.logout()}
-            >
-              <AiOutlineLogout />
-            </LogoutBtn>
-          </BtnDiv>
 
-          <Date
-            day={this.state.selectedDate.getDay()}
-            date={this.state.selectedDate.getDate()}
-            month={this.state.selectedDate.getMonth()}
-          />
-
-          <List
-            years={this.state.selectedDate.getFullYear()}
-            day={this.state.selectedDate.getDate()}
-            month={this.state.selectedDate.getMonth()}
-          />
-          <InspiredText>
-            Inspired by <ReactText>React</ReactText>
-          </InspiredText>
-        </BodyStyle>
-      </div>
+              <List
+                years={this.state.selectedDate.getFullYear()}
+                day={this.state.selectedDate.getDate()}
+                month={this.state.selectedDate.getMonth()}
+              />
+              <InspiredText>
+                Inspired by <ReactText>React</ReactText>
+              </InspiredText>
+            </BodyStyle>
+          </div>
+        ) : (
+          <Loading />
+        )}
+      </>
     );
   }
 }
@@ -233,7 +258,8 @@ const mapStateToProps = (state) => ({
   userId: state.task.userId,
   theme: state.user.theme,
   username: state.user.name,
-  // img: state.user.image,
+  img: state.user.image,
+  loading: state.user.loading,
 });
 
 export default connect(mapStateToProps, {

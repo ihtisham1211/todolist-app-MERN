@@ -51,6 +51,29 @@ const Title = styled.h2`
   line-height: 0.8;
   color: #322f3d;
 `;
+const Loading = styled.div`
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  &::after {
+    content: " ";
+    display: block;
+    width: 20vh;
+    height: 20vh;
+    margin: 35vh auto;
+    border-radius: 50%;
+    border: 6px solid whitesmoke;
+    border-color: whitesmoke transparent whitesmoke transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+  display: flex;
+  margin: auto;
+`;
 //**************************
 //Styles
 //**************************
@@ -88,36 +111,43 @@ export class Login extends Component {
       return <Redirect to={`/todolist`} />;
     } else
       return (
-        <LoginForm onSubmit={(e) => this.onSubmit(e)}>
-          <Title>Login</Title>
-          <LoginImg alt="loginimg.png" src={login_img} />
-          <TextBox
-            type="email"
-            placeholder="Email Address"
-            name="email"
-            value={this.state.email}
-            onChange={(e) => this.onChange(e)}
-          />
-          <TextBox
-            type="password"
-            placeholder="Password"
-            name="password"
-            minLength="6"
-            value={this.state.password}
-            onChange={(e) => this.onChange(e)}
-          />
-          <BtnBox type="submit">Login</BtnBox>
-          <BtnBox onClick={(e) => this.routeChange(`/register`)}>
-            Register
-          </BtnBox>
-          <Alert />
-        </LoginForm>
+        <>
+          {!this.props.loading ? (
+            <LoginForm onSubmit={(e) => this.onSubmit(e)}>
+              <Title>Login</Title>
+              <LoginImg alt="loginimg.png" src={login_img} />
+              <TextBox
+                type="email"
+                placeholder="Email Address"
+                name="email"
+                value={this.state.email}
+                onChange={(e) => this.onChange(e)}
+              />
+              <TextBox
+                type="password"
+                placeholder="Password"
+                name="password"
+                minLength="6"
+                value={this.state.password}
+                onChange={(e) => this.onChange(e)}
+              />
+              <BtnBox type="submit">Login</BtnBox>
+              <BtnBox onClick={(e) => this.routeChange(`/register`)}>
+                Register
+              </BtnBox>
+              <Alert />
+            </LoginForm>
+          ) : (
+            <Loading />
+          )}
+        </>
       );
   }
 }
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  loading: state.user.loading,
 });
 
 export default connect(mapStateToProps, { login })(Login);
