@@ -35,6 +35,7 @@ export default function (state = initialState, action) {
     case "SET_NAME_AND_IMAGE":
       return {
         ...state,
+        theme: true,
         loading: true,
         name: localStorage.getItem("name"),
         image: localStorage.getItem("image"),
