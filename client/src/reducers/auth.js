@@ -8,8 +8,8 @@ import {
 
 const initialState = {
   token: localStorage.getItem("token"),
-  isAuthenticated: null,
-  user: null,
+  isAuthenticated: '',
+  user: '',
 };
 
 export default function (state = initialState, action) {

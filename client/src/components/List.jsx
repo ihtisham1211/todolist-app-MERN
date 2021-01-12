@@ -114,7 +114,7 @@ export class List extends Component {
 
 const mapStateToProps = (state) => ({
   taskList: state.task.taskList,
-  userId: state.task.userId,
+  userId: state.auth.user._id,
   token: state.auth.token,
   theme: state.user.theme,
 });

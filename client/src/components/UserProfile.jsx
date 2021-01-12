@@ -235,11 +235,11 @@ class UserProfile extends Component {
 function mapStateToProps(state) {
   return {
     theme: state.user.theme,
-    username: localStorage.getItem("name"),
-    email: localStorage.getItem("email"),
-    image: localStorage.getItem("image"),
-    token: localStorage.getItem("token"),
-    id: state.task.userId,
+    username:  state.auth.user.name,
+    email:  state.auth.user.email,
+    image: state.auth.user.image,
+    token: state.auth.token,
+    id: state.auth.user._id,
   };
 }
 

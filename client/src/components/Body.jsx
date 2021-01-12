@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { logout } from "../actions/auth";
 import { themeChange } from "../actions/user";
-import { getAllTasks, storeUserId } from "../actions/task";
+import { getAllTasks } from "../actions/task";
 import { AiOutlineLogout } from "react-icons/ai";
 import { FaExchangeAlt } from "react-icons/fa";
 import DateFnsUtils from "@date-io/date-fns";
@@ -164,12 +164,12 @@ export class Body extends Component {
   }
 
   componentDidMount() {
-    this.props.storeUserId(
-      this.props.token,
+    this.props.getAllTasks(
+      this.props.userId,
       this.state.selectedDate.getDate(),
       this.state.selectedDate.getMonth() + 1,
       this.state.selectedDate.getFullYear()
-    ); // + getAllTasks
+    );
   }
 
   render() {
@@ -255,16 +255,15 @@ export class Body extends Component {
 
 const mapStateToProps = (state) => ({
   token: state.auth.token,
-  userId: state.task.userId,
+  userId: state.auth.user._id,
   theme: state.user.theme,
-  username: state.user.name,
-  img: state.user.image,
+  username: state.auth.user.name,
+  img: state.auth.user.image,
   loading: state.user.loading,
 });
 
 export default connect(mapStateToProps, {
   logout,
-  storeUserId,
   themeChange,
   getAllTasks,
 })(Body);

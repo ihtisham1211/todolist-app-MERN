@@ -2,28 +2,6 @@ import axios from "axios";
 import { setAlert } from "./alert";
 import { url } from "../utils/proxy";
 //**********************************
-//***********storeUserId
-//**********************************
-export const storeUserId = (token, day, month, year) => async (dispatch) => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-      "x-auth-token": token,
-    },
-  };
-  try {
-    const res = await axios.get(url + "/api/auth/", config);
-    dispatch({
-      type: "ADD_USER_ID",
-      payload: res.data._id,
-    });
-    console.log("storeUserId");
-    dispatch(getAllTasks(res.data._id, day, month, year));
-  } catch (e) {
-    dispatch(setAlert("Failed To Get UserId", "error"));
-  }
-};
-//**********************************
 //***********getAllTasks
 //**********************************
 export const getAllTasks = (userId, day, month, year) => async (dispatch) => {
