@@ -5,7 +5,7 @@ import { createUser } from "../actions/user";
 import Alert from "./routering/Alert";
 import { Redirect } from "react-router";
 import Reg_img from "./assets/undraw_super_thank_you_obwk.png";
-import {BiArrowBack} from "react-icons/bi";
+import { BiArrowBack } from "react-icons/bi";
 
 const RegisterForm = styled.form`
   display: flex;
@@ -43,19 +43,27 @@ const BtnBox = styled.button`
 `;
 const RegImg = styled.img`
   align-self: center;
+  margin: 0.5vh 0 0 0;
   height: 40vh;
 `;
 const BackBtn = styled.button`
   &:hover {
     color: #cc4c43;
   }
+  display: flex;
   background-color: #ffffff;
   align-self: flex-start;
   margin: 0;
   border: none;
   color: #ac8eca;
   font-size: 3vh;
-
+`;
+const Title = styled.h2`
+  font-size: 3vh;
+  margin: 1.5vh 0 0 18vh ;
+  text-align: center;
+  line-height: 0.8;
+  color: #322f3d;
 `;
 //**************************
 //Styles
@@ -96,13 +104,15 @@ class Register extends Component {
     } else
       return (
         <RegisterForm onSubmit={(e) => this.onSubmit(e)}>
-            <BackBtn
-          onClick={(e) => {
-            this.routeChange(`/`);
-          }}
-        >
-          <BiArrowBack />
-        </BackBtn>
+          <BackBtn
+            onClick={(e) => {
+              this.routeChange(`/`);
+            }}
+          >
+            <BiArrowBack />
+            <Title>Register</Title>
+          </BackBtn>
+
           <RegImg alt="regimg.png" src={Reg_img} />
           <TextBox
             type="name"

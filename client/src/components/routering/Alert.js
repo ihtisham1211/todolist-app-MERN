@@ -8,7 +8,7 @@ const AlertM = ({ alerts }) =>
   alerts !== null &&
   alerts.length > 0 &&
   alerts.map((alert) => (
-      <Alert severity={alert.alertType}>{alert.msg}</Alert>
+      <Alert variant="outlined" severity={alert.alertType}>{alert.msg}</Alert>
   ));
 
 AlertM.propTypes = {
