@@ -159,14 +159,18 @@ export class Body extends Component {
           >
             {this.props.username}
           </UserTag>
-          {this.props.img.length === 0 || this.props.img === null ? (
-            <UserImage
+          {/*{this.props.img.length === 0 || this.props.img === null ? (*/}
+          {/*  <UserImage*/}
+          {/*    alt=" "*/}
+          {/*    src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"*/}
+          {/*  />*/}
+          {/*) : (*/}
+          {/*  <UserImage alt=" " src={this.props.img} />*/}
+          {/*)}*/}
+             <UserImage
               alt=" "
               src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
             />
-          ) : (
-            <UserImage alt=" " src={this.props.img} />
-          )}
         </UserBadge>
         <BodyStyle mode={this.props.theme ? 1 : 0}>
           <BtnDiv>
@@ -229,7 +233,7 @@ const mapStateToProps = (state) => ({
   userId: state.task.userId,
   theme: state.user.theme,
   username: state.user.name,
-  img: state.user.image,
+  // img: state.user.image,
 });
 
 export default connect(mapStateToProps, {
