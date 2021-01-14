@@ -5,6 +5,23 @@ import styled from "styled-components";
 import Alert from "./routering/Alert";
 import { Redirect } from "react-router";
 import login_img from "./assets/undraw_secure_login_pdn4.png";
+import Button from "@material-ui/core/Button";
+import { purple } from "@material-ui/core/colors";
+import { withStyles } from "@material-ui/core/styles";
+
+const ColorButton = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText(purple[400]),
+    backgroundColor: purple[400],
+    margin: "1vh 0 0.5vh 0",
+    width: "70%",
+    alignSelf: "center",
+    "&:hover": {
+      backgroundColor: purple[700],
+    },
+  },
+}))(Button);
+
 const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -23,21 +40,6 @@ const TextBox = styled.input`
   padding: 1.1vh 1.3vh;
   margin: 0.8vh 0;
   width: 45vh;
-`;
-const BtnBox = styled.button`
-  &:hover {
-    background-color: #9b48bf;
-    color: black;
-  }
-  align-self: center;
-  border: solid 1px #ac8eca;
-  padding: 1vh 1.3vh;
-  margin: 0.8vh 0;
-  font-weight: bold;
-  width: 28vh;
-  font-size: 1.7vh;
-  background-color: #ac8eca;
-  transition: 0.3s;
 `;
 
 const LoginImg = styled.img`
@@ -131,10 +133,10 @@ export class Login extends Component {
                 value={this.state.password}
                 onChange={(e) => this.onChange(e)}
               />
-              <BtnBox type="submit">Login</BtnBox>
-              <BtnBox onClick={(e) => this.routeChange(`/register`)}>
+              <ColorButton type="submit">Login</ColorButton>
+              <ColorButton onClick={(e) => this.routeChange(`/register`)}>
                 Register
-              </BtnBox>
+              </ColorButton>
               <Alert />
             </LoginForm>
           ) : (

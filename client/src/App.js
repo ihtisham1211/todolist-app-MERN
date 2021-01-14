@@ -20,6 +20,7 @@ function App() {
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
+
   return (
     <div className="App">
       <Provider store={store}>
@@ -27,8 +28,8 @@ function App() {
           <Route exact path="/" component={Login} />
           <Route path="/register" component={Register} />
           <Switch>
-            <PrivateRoute exact path="/todolist" component={Body} />
-            <PrivateRoute exact path="/userprofile" component={UserProfile} />
+            <PrivateRoute path="/todolist" component={Body} />
+            <PrivateRoute path="/userprofile" component={UserProfile} />
           </Switch>
         </Router>
       </Provider>

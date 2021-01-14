@@ -6,6 +6,22 @@ import Alert from "./routering/Alert";
 import { setAlert } from "../actions/alert";
 import { updateUser } from "../actions/user";
 import { loadUser } from "../actions/auth";
+import Button from "@material-ui/core/Button";
+import { purple } from "@material-ui/core/colors";
+import { withStyles } from "@material-ui/core/styles";
+
+const ColorButton = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText(purple[400]),
+    backgroundColor: purple[400],
+    margin: "1vh 0 0.5vh 0",
+    width: "70%",
+    alignSelf: "center",
+    "&:hover": {
+      backgroundColor: purple[700],
+    },
+  },
+}))(Button);
 
 const BodyStyle = styled.div`
   display: flex;
@@ -43,7 +59,6 @@ const TextBox = styled.input`
   padding: 12px 15px;
   margin: 8px 0;
   width: 80%;
-
 `;
 const UserImage = styled.img`
   display: block;
@@ -84,9 +99,8 @@ const DoneBtn = styled.button`
   font-weight: bold;
   width: 50%;
   background-color: #ac8eca;
-  transition: 0.3s; 
+  transition: 0.3s;
   color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
-
 `;
 
 const UserForm = styled.form`
@@ -222,9 +236,7 @@ class UserProfile extends Component {
             onChange={(e) => this.onChange(e)}
             required
           />
-          <DoneBtn mode={this.props.theme ? 1 : 0} type="submit">
-            Done
-          </DoneBtn>
+          <ColorButton type="submit">Done</ColorButton>
         </UserForm>
         <Alert />
       </BodyStyle>
@@ -235,8 +247,8 @@ class UserProfile extends Component {
 function mapStateToProps(state) {
   return {
     theme: state.user.theme,
-    username:  state.auth.user.name,
-    email:  state.auth.user.email,
+    username: state.auth.user.name,
+    email: state.auth.user.email,
     image: state.auth.user.image,
     token: state.auth.token,
     id: state.auth.user._id,
