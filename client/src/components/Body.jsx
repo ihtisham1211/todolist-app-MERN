@@ -16,6 +16,7 @@ import {
 import { getCurrentDate } from "../utils/dateFunction";
 import "date-fns";
 import { BiCalendar } from "react-icons/bi";
+import {Redirect} from "react-router";
 
 const BodyStyle = styled.div`
   display: flex;
@@ -173,6 +174,10 @@ export class Body extends Component {
   }
 
   render() {
+    if (!this.props.isAuthenticated) {
+      return <Redirect to={`/`} />;
+    }
+    else
     return (
       <>
         {this.props.loading ? (
@@ -260,6 +265,7 @@ const mapStateToProps = (state) => ({
   username: state.auth.user.name,
   img: state.auth.user.image,
   loading: state.user.loading,
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps, {

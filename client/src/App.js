@@ -8,7 +8,6 @@ import Body from "./components/Body";
 import setAuthToken from "./utils/setAuthToken";
 import { loadUser } from "./actions/auth";
 import Login from "./components/Login";
-import PrivateRoute from "./components/routering/PrivateRoute";
 import Register from "./components/Register";
 import UserProfile from "./components/UserProfile";
 
@@ -28,8 +27,8 @@ function App() {
           <Route exact path="/" component={Login} />
           <Route path="/register" component={Register} />
           <Switch>
-            <PrivateRoute path="/todolist" component={Body} />
-            <PrivateRoute path="/userprofile" component={UserProfile} />
+            <Route path="/todolist" component={Body} />
+            <Route path="/userprofile" component={UserProfile} />
           </Switch>
         </Router>
       </Provider>
