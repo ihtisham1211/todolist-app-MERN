@@ -1,122 +1,71 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import Boxes from "./Boxes";
-import { v4 as uuid } from "uuid";
-import { addTask } from "../actions/task";
-
-const ListBody = styled.div`
-  height: 450px;
-  overflow-x: hidden;
-  scrollbar-width: none;
-`;
-
-const ButtonBox = styled.div`
+import { BsListUl } from "react-icons/bs";
+import { FaGreaterThan } from "react-icons/fa";
+const ListIcon = styled.div`
   display: flex;
-  border-bottom: 0.5px solid lightgray;
-  margin: 5px 0px 8px 0px;
+  align-self: center;
+  background-color: #2d62f3;
+  font-size: 3vh;
+  border-radius: 4vh;
+  padding: 1vh;
+  margin: 1vh;
+  color: #e5e5e5;
 `;
-const TextBox = styled.input`
-  &:focus {
-    color: ${(props) => (props.mode ? "#ac8eca" : "#ac8eca")};
+const ListBody = styled.div`
+  &:hover {
+    opacity: 0.7;
   }
+  display: flex;
+  height: 5vh;
+  padding: 1vh;
+`;
 
-  ,
-&:: placeholder {
-    color: ${(props) => (props.mode ? "#ac8eca" : "#ac8eca")};
-  }
+const ContainTNA = styled.div`
+  display: flex;
+  margin-top: 1vh;
+  border-bottom: 0.5px solid #5f5f5f;
   width: 100%;
-  border: transparent;
-  background-color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
-  margin-left: 10px;
 `;
-const AddButton = styled.button`
-  font-size: 40px;
-  border: transparent;
-  color: #ac8eca;
-  background-color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
+const Text = styled.div`
+  margin-left: 1vh;
+  color: #e5e5e5;
+  font-size: 2vh;
+  width: 100%;
 `;
-//**************************
-//Styles
-//**************************
+const Number = styled.div`
+  color: lightgray;
+  font-size: 2vh;
+  margin-left: auto;
+`;
+const Arrow = styled.div`
+  margin: 0.5vh 0.5vh 0.5vh 1vh;
+  color: gray;
+  font-size: 1.5vh;
+`;
 
-export class List extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      input: "",
-    };
-    this.onChange = this.onChange.bind(this);
-    this.addClick = this.addClick.bind(this);
-  }
-
-  onChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-  }
-
-  addClick() {
-    this.props.addTask(
-      this.props.userId,
-      this.state.input,
-      "null",
-      this.props.token,
-      this.props.day,
-      this.props.month + 1,
-      this.props.years
-    );
-  }
-
+class List extends Component {
   render() {
     return (
       <ListBody>
-        <ButtonBox>
-          <AddButton
-            mode={this.props.theme ? 1 : 0}
-            onClick={(e) => this.addClick(e)}
-          >
-            +
-          </AddButton>
-          <TextBox
-            mode={this.props.theme ? 1 : 0}
-            placeholder="Type Your Task"
-            name="input"
-            value={this.state.input}
-            onChange={(e) => this.onChange(e)}
-          />
-        </ButtonBox>
-        {this.props.taskList === null ? (
-          <span> </span>
-        ) : (
-          this.props.taskList.map((task) => {
-            if (task.user === this.props.userId)
-              return (
-                <Boxes
-                  key={uuid()}
-                  id={task._id}
-                  user={task.user}
-                  title={task.title}
-                  description={task.description}
-                  date={task.date}
-                  status={task.status}
-                  day={this.props.day}
-                  month={this.props.month}
-                  years={this.props.years}
-                />
-              );
-          })
-        )}
+        <ListIcon>
+          <BsListUl />
+        </ListIcon>
+        <ContainTNA>
+          <Text>{this.props.name}</Text>
+          <Number>{this.props.task}</Number>
+          <Arrow>
+            <FaGreaterThan />
+          </Arrow>
+        </ContainTNA>
       </ListBody>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  taskList: state.task.taskList,
-  userId: state.auth.user._id,
-  token: state.auth.token,
-  theme: state.user.theme,
-});
+function mapStateToProps(state) {
+  return {};
+}
 
-export default connect(mapStateToProps, { addTask })(List);
+export default connect(mapStateToProps)(List);

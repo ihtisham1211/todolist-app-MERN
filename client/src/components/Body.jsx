@@ -1,106 +1,61 @@
+//libs
 import React, { Component } from "react";
-import Date from "./Date";
-import List from "./List";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import "date-fns";
+import { v4 as uuid } from "uuid";
+import { withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
+//components
+import List from "./List";
+import Addlistmodel from "./Addlistmodel";
+//functions
 import { logout } from "../actions/auth";
 import { themeChange } from "../actions/user";
-import { getAllTasks } from "../actions/task";
-import { AiOutlineLogout } from "react-icons/ai";
-import { FaExchangeAlt } from "react-icons/fa";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
-import { getCurrentDate } from "../utils/dateFunction";
-import "date-fns";
-import { BiCalendar } from "react-icons/bi";
-import {Redirect} from "react-router";
+import { getData } from "../actions/task";
+//icons
+import { BiSearchAlt2 } from "react-icons/bi";
+import { MdToday } from "react-icons/md";
+import { BsCalendar } from "react-icons/bs";
+import { IoMdAddCircle } from "react-icons/io";
+import AddReminderModel from "./AddReminderModel";
 
-const BodyStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  width: 500px;
-  height: 680px;
-  background: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
-  margin: 50px auto;
-  border-radius: 10px;
-  padding: 25px;
-`;
-const InspiredText = styled.a`
-  position: absolute;
-  margin: 650px auto auto 180px;
-  color: #ac8eca;
-`;
-const ReactText = styled.span`
-  color: #cc4c43;
-`;
-const BtnDiv = styled.div`
-  display: flex;
-  align-self: center;
-`;
-const LogoutBtn = styled.button`
-  &:hover {
-    color: #cc4c43;
-  }
+const StyledMenu = withStyles({
+  paper: {
+    backgroundColor: "#111",
+    borderRadius: "1vh",
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "center",
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "center",
+    }}
+    {...props}
+  />
+));
+const StyledMenuItem = withStyles((theme) => ({
+  root: {
+    "&:focus": {
+      backgroundColor: "#3b3b3b",
+    },
+    "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+      color: "#e5e5e5",
+    },
+  },
+}))(MenuItem);
 
-  border: none;
-  color: #ac8eca;
-  background-color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
-  font-size: 20px;
-`;
-const ThemeBtn = styled.button`
-  &:hover {
-    color: #cc4c43;
-  }
-
-  border: none;
-  color: #ac8eca;
-  background-color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
-  font-size: 20px;
-`;
-const CalBtn = styled.button`
-  &:hover {
-    color: #cc4c43;
-  }
-
-  border: none;
-  color: #ac8eca;
-  background-color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
-  font-size: 20px;
-`;
-
-const UserBadge = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin: 10px 10px 0 auto;
-  background-color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
-  border-radius: 30px;
-  width: 180px;
-`;
-
-const UserImage = styled.img`
-  display: block;
-  height: 60px;
-  width: 60px;
-  margin: 0 0 0 10px;
-  border-radius: 30px;
-`;
-const UserTag = styled.button`
-  &:hover {
-    color: #cc4c43;
-  }
-
-  border: none;
-  background-color: ${(props) => (props.mode ? "#faf8f8" : "#322f3d")};
-  text-transform: uppercase;
-  margin-left: auto;
-  font-weight: bolder;
-  color: #ac8eca;
-  border-radius: 30vh;
-`;
 const Loading = styled.div`
   @keyframes lds-dual-ring {
     0% {
@@ -124,6 +79,176 @@ const Loading = styled.div`
   display: flex;
   margin: auto;
 `;
+const BodyStyle = styled.div`
+  @media (max-width: 400px) {
+    width: auto;
+    margin: 5vh 1vh 0 1vh;
+  }
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 50vh;
+  height: 77vh;
+  background: #111;
+  margin: 5vh auto;
+  border-radius: 1vh;
+  padding: 1.5vh;
+`;
+const UserImage = styled.img`
+  border-radius: 5vh;
+  height: 6vh;
+  width: 6vh;
+`;
+//***********************************
+// Search
+//***********************************
+const SearchBar = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  background-color: #3b3b3b;
+  opacity: 0.7;
+  border-radius: 1vh;
+  width: 100%;
+  height: 4vh;
+`;
+const Searchfield = styled.input`
+  border: none;
+  width: auto;
+  background-color: #3b3b3b;
+  color: lightgray;
+  font-size: 2vh;
+`;
+const Seachicon = styled.div`
+  font-size: 2.5vh;
+  margin: 0.8vh 1vh 0 0.5vh;
+  color: lightgray;
+`;
+//***********************************
+// 2 boxes
+//***********************************
+const BoxStyle = styled.div`
+  @media (max-width: 400px) {
+    margin-top: 1vh;
+  }
+  &:hover {
+    opacity: 0.7;
+  }
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #3b3b3b;
+  border-radius: 2vh;
+  height: 12vh;
+  width: 22vh;
+  padding: 1vh;
+`;
+const IconCountBlock = styled.div`
+  display: flex;
+`;
+const TodayIcon = styled.div`
+  display: flex;
+  align-self: center;
+  background-color: #2d62f3;
+  font-size: 3vh;
+  border-radius: 4vh;
+  padding: 1vh;
+  margin: 1vh auto 1vh 1vh;
+  color: #e5e5e5;
+`;
+const ScheduledIcon = styled.div`
+  display: flex;
+  align-self: center;
+  background-color: #ff2323;
+  font-size: 3vh;
+  border-radius: 4vh;
+  padding: 1vh;
+  margin: 1vh auto 1vh 1vh;
+  color: #e5e5e5;
+`;
+const Count = styled.div`
+  color: #e5e5e5;
+  font-size: 3vh;
+  font-weight: bold;
+  margin: 1.5vh 1vh 1vh auto;
+`;
+const Text = styled.div`
+  color: lightgray;
+  font-size: 2.5vh;
+  font-weight: bold;
+  margin: 1vh;
+`;
+const ContainBox = styled.div`
+  @media (max-width: 400px) {
+    flex-direction: column;
+  }
+  display: flex;
+  justify-content: center;
+  margin-top: 3vh;
+`;
+
+const MyList = styled.h2`
+  color: lightgray;
+  margin-left: 4vh;
+  font-size: 2.5vh;
+`;
+
+//***********************************
+// List Dropdown
+//***********************************
+const ListConatiner = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 0 1vh 0 1vh;
+  background-color: #3b3b3b;
+  border-radius: 2vh;
+  padding: 0.5vh;
+  overflow: scroll;
+  scrollbar-width: none;
+`;
+//***********************************
+// Bottom buttons
+//***********************************
+const ContainBtn = styled.div`
+  display: flex;
+  margin-top: auto;
+  width: 100%;
+  margin-bottom: 0;
+`;
+const AddRem = styled.button`
+  border: none;
+  background-color: transparent;
+  color: #2d62f3;
+  font-size: 1.5vh;
+`;
+const RemIcon = styled.div`
+  display: flex;
+  align-self: center;
+  font-size: 3vh;
+  border-radius: 4vh;
+  margin: 1vh auto 1vh 1vh;
+  color: #2d62f3;
+`;
+const AddList = styled.button`
+  &:hover {
+    opacity: 0.7;
+  }
+  border: none;
+  background-color: transparent;
+  color: #2d62f3;
+  font-size: 1.5vh;
+  margin-left: auto;
+  justify-items: flex-end;
+`;
+const AddandREM = styled.div`
+  &:hover {
+    opacity: 0.7;
+  }
+  display: flex;
+  align-self: flex-start;
+`;
+const MenuBox = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
 //**************************
 //Styles
 //**************************
@@ -132,122 +257,120 @@ export class Body extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedDate: getCurrentDate(),
+      anchorEl: null,
       isOpen: false,
+      isOpen_rem: false,
     };
   }
-
-  handleDateChange(date) {
-    this.props.getAllTasks(
-      this.props.userId,
-      this.state.selectedDate.getDate(),
-      this.state.selectedDate.getMonth() + 1,
-      this.state.selectedDate.getFullYear()
-    );
-    this.setState({
-      selectedDate: date,
-    });
-  }
-
   routeChange(path) {
     this.props.history.push(path);
   }
-
-  setIsOpen(cond) {
-    this.setState({
-      isOpen: cond,
-    });
-  }
-
-  move(e) {
-    e.preventDefault();
-    this.routeChange(`/userprofile`);
-  }
-
   componentDidMount() {
-    this.props.getAllTasks(
-      this.props.userId,
-      this.state.selectedDate.getDate(),
-      this.state.selectedDate.getMonth() + 1,
-      this.state.selectedDate.getFullYear()
-    );
+    this.props.getData(this.props.token);
   }
-
   render() {
-    if (!this.props.isAuthenticated) {
-      return <Redirect to={`/`} />;
-    }
-    else
     return (
       <>
         {this.props.loading ? (
           <div>
-            <UserBadge mode={this.props.theme ? 1 : 0}>
-              <UserTag
-                mode={this.props.theme ? 1 : 0}
-                onClick={(e) => this.move(e)}
+            <MenuBox>
+              <Button
+                aria-controls="customized-menu"
+                aria-haspopup="true"
+                onClick={(e) => this.setState({ anchorEl: e.currentTarget })}
               >
-                {this.props.username}
-              </UserTag>
-              {this.props.img.length === 0 || this.props.img === null ? (
-                <UserImage
-                  alt=" "
-                  src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
-                />
-              ) : (
-                <UserImage alt=" " src={this.props.img} />
-              )}
-            </UserBadge>
-            <BodyStyle mode={this.props.theme ? 1 : 0}>
-              <BtnDiv>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
-                    open={this.state.isOpen}
-                    onOpen={() => this.setIsOpen(true)}
-                    onClose={() => this.setIsOpen(false)}
-                    disableToolbar
-                    variant="inline"
-                    format="dd/MM/yyyy"
-                    InputProps={{ disableUnderline: true }}
-                    TextFieldComponent={() => null}
-                    value={this.state.selectedDate}
-                    onChange={(date) => this.handleDateChange(date)}
+                {this.props.img.length === 0 || this.props.img === null ? (
+                  <UserImage
+                    alt="userImage"
+                    src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
                   />
-                </MuiPickersUtilsProvider>
-                <CalBtn
-                  mode={this.props.theme ? 1 : 0}
-                  onClick={() => this.setIsOpen(true)}
-                >
-                  <BiCalendar />
-                </CalBtn>
-                <ThemeBtn
-                  mode={this.props.theme ? 1 : 0}
-                  onClick={() => this.props.themeChange(this.props.theme)}
-                >
-                  <FaExchangeAlt />
-                </ThemeBtn>
-                <LogoutBtn
-                  mode={this.props.theme ? 1 : 0}
-                  onClick={() => this.props.logout()}
-                >
-                  <AiOutlineLogout />
-                </LogoutBtn>
-              </BtnDiv>
-
-              <Date
-                day={this.state.selectedDate.getDay()}
-                date={this.state.selectedDate.getDate()}
-                month={this.state.selectedDate.getMonth()}
-              />
-
-              <List
-                years={this.state.selectedDate.getFullYear()}
-                day={this.state.selectedDate.getDate()}
-                month={this.state.selectedDate.getMonth()}
-              />
-              <InspiredText>
-                Inspired by <ReactText>React</ReactText>
-              </InspiredText>
+                ) : (
+                  <UserImage alt="userImage" src={this.props.img} />
+                )}
+              </Button>
+              <StyledMenu
+                id="customized-menu"
+                anchorEl={this.state.anchorEl}
+                keepMounted
+                open={Boolean(this.state.anchorEl)}
+                onClose={() => this.setState({ anchorEl: null })}
+              >
+                <StyledMenuItem onClick={() => this.props.logout()}>
+                  <ListItemIcon>
+                    <ExitToAppOutlinedIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Log out" />
+                </StyledMenuItem>
+              </StyledMenu>
+            </MenuBox>
+            <BodyStyle>
+              {/*SearchBar*/}
+              <SearchBar>
+                <Seachicon>
+                  <BiSearchAlt2 />
+                </Seachicon>
+                <Searchfield placeholder="Search" />
+              </SearchBar>
+              {/*Container box for boxes*/}
+              <ContainBox>
+                {/*Today*/}
+                <BoxStyle>
+                  <IconCountBlock>
+                    <TodayIcon>
+                      <MdToday />
+                    </TodayIcon>
+                    <Count>0</Count>
+                  </IconCountBlock>
+                  <Text>Today</Text>
+                </BoxStyle>
+                {/*Scheduled*/}
+                <BoxStyle>
+                  <IconCountBlock>
+                    <ScheduledIcon>
+                      <BsCalendar />
+                    </ScheduledIcon>
+                    <Count>0</Count>
+                  </IconCountBlock>
+                  <Text>Scheduled</Text>
+                </BoxStyle>
+              </ContainBox>
+              <MyList>My Lists</MyList>
+              <ListConatiner>
+                {this.props.taskList.length !== 0 ? (
+                  this.props.taskList.map((list) => {
+                    return (
+                      <List
+                        key={uuid()}
+                        name={list.listName}
+                        task={list.taskList.length}
+                      />
+                    );
+                  })
+                ) : (
+                  <div>" "</div>
+                )}
+              </ListConatiner>
+              <ContainBtn>
+                <AddandREM>
+                  <RemIcon>
+                    <IoMdAddCircle />
+                  </RemIcon>
+                  <AddRem onClick={() => this.setState({ isOpen_rem: true })}>
+                    New Reminder
+                  </AddRem>
+                </AddandREM>
+                <AddReminderModel
+                  open={this.state.isOpen_rem}
+                  onClose={() => this.setState({ isOpen_rem: false })}
+                />
+                <AddList onClick={() => this.setState({ isOpen: true })}>
+                  Add List
+                </AddList>
+                <Addlistmodel
+                  open={this.state.isOpen}
+                  onClose={() => this.setState({ isOpen: false })}
+                />
+              </ContainBtn>
             </BodyStyle>
           </div>
         ) : (
@@ -261,15 +384,14 @@ export class Body extends Component {
 const mapStateToProps = (state) => ({
   token: state.auth.token,
   userId: state.auth.user._id,
-  theme: state.user.theme,
-  username: state.auth.user.name,
   img: state.auth.user.image,
   loading: state.user.loading,
   isAuthenticated: state.auth.isAuthenticated,
+  taskList: state.task.taskList,
 });
 
 export default connect(mapStateToProps, {
   logout,
   themeChange,
-  getAllTasks,
+  getData,
 })(Body);

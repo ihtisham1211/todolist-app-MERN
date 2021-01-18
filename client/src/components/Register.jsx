@@ -7,25 +7,28 @@ import { Redirect } from "react-router";
 import Reg_img from "./assets/undraw_super_thank_you_obwk.png";
 import { BiArrowBack } from "react-icons/bi";
 import Button from "@material-ui/core/Button";
-import { purple } from "@material-ui/core/colors";
-import {
-  withStyles
-} from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 
 const ColorButton = withStyles((theme) => ({
   root: {
-    color: theme.palette.getContrastText(purple[400]),
-    backgroundColor: purple[400],
-    margin: "1vh 0 0.5vh 0",
-    width:"70%",
-    alignSelf:"center",
+    color: "#ffffff",
+    backgroundColor: "#322f3d",
+    margin: "1vh",
+    width: "23vh",
+    height: "4.5vh",
+    alignSelf: "center",
+    fontSize: "1.7vh",
     "&:hover": {
-      backgroundColor: purple[700],
+      backgroundColor: "#6f6b7c",
     },
   },
 }))(Button);
 
 const RegisterForm = styled.form`
+  @media (max-width: 450px) {
+    width: auto;
+    margin: 9vh 1vh 0 1vh;
+  }
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -39,14 +42,23 @@ const RegisterForm = styled.form`
 const TextBox = styled.input`
   align-self: center;
   background-color: #ffffff;
-  border: solid 1px #ac8eca;
+  border-radius: 0.5vh;
+  border: solid 1px #322f3d;
   padding: 1.1vh 1.3vh;
   margin: 0.8vh 0;
-  width: 45vh;
+  width: 80%;
+  height: 1.5vh;
+  font-size: 2vh;
 `;
 const RegImg = styled.img`
+  @media (max-width: 450px) {
+    height: 30vh;
+  }
+  @media (max-width: 250px) {
+    height: 15vh;
+  }
   align-self: center;
-  margin: 0.5vh 0 0 0;
+  margin: 0.5vh;
   height: 40vh;
 `;
 const BackBtn = styled.button`
@@ -54,19 +66,24 @@ const BackBtn = styled.button`
     color: #cc4c43;
   }
   display: flex;
-  background-color: #ffffff;
-  align-self: flex-start;
-  margin: 0;
+  background-color: transparent;
+  align-self: center;
+  margin: 0 auto 0 0;
   border: none;
-  color: #ac8eca;
+  color: #322f3d;
   font-size: 3vh;
 `;
 const Title = styled.h2`
+  position: absolute;
+  margin-top: 1vh;
   font-size: 3vh;
-  margin: 1.5vh 0 0 18vh ;
-  text-align: center;
   line-height: 0.8;
   color: #322f3d;
+`;
+
+const RegDiv = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 //**************************
 //Styles
@@ -107,14 +124,17 @@ class Register extends Component {
     } else
       return (
         <RegisterForm onSubmit={(e) => this.onSubmit(e)}>
-          <BackBtn
-            onClick={(e) => {
-              this.routeChange(`/`);
-            }}
-          >
-            <BiArrowBack />
-            <Title>Register</Title>
-          </BackBtn>
+          <RegDiv>
+            {" "}
+            <BackBtn
+              onClick={(e) => {
+                this.routeChange(`/`);
+              }}
+            >
+              <BiArrowBack />
+            </BackBtn>{" "}
+            <Title>Register</Title>{" "}
+          </RegDiv>
 
           <RegImg alt="regimg.png" src={Reg_img} />
           <TextBox
@@ -123,6 +143,7 @@ class Register extends Component {
             name="username"
             value={this.state.username}
             onChange={(e) => this.onChange(e)}
+            required
           />
           <TextBox
             type="email"
@@ -130,6 +151,7 @@ class Register extends Component {
             name="email"
             value={this.state.email}
             onChange={(e) => this.onChange(e)}
+            required
           />
           <TextBox
             type="password"
@@ -138,6 +160,7 @@ class Register extends Component {
             minLength="6"
             value={this.state.password}
             onChange={(e) => this.onChange(e)}
+            required
           />
           <ColorButton type="submit">Register</ColorButton>
           <Alert />

@@ -5,21 +5,29 @@ const taskSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
-  date: {
+  listName: {
     type: String,
     required: true,
   },
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-  },
-  status: {
-    type: String,
-    required: true,
-  },
+  taskList: [
+    {
+      title: {
+        type: String,
+        required: true,
+      },
+      date: {
+        type: String,
+        required: true,
+      },
+      status: {
+        type: String,
+        required: true,
+      },
+      description: {
+        type: String,
+      },
+    },
+  ],
 });
 
 module.exports = Task = mongoose.model("task", taskSchema);

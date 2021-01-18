@@ -6,53 +6,8 @@ import Alert from "./routering/Alert";
 import { Redirect } from "react-router";
 import login_img from "./assets/undraw_secure_login_pdn4.png";
 import Button from "@material-ui/core/Button";
-import { purple } from "@material-ui/core/colors";
 import { withStyles } from "@material-ui/core/styles";
 
-const ColorButton = withStyles((theme) => ({
-  root: {
-    color: theme.palette.getContrastText(purple[400]),
-    backgroundColor: purple[400],
-    margin: "1vh 0 0.5vh 0",
-    width: "70%",
-    alignSelf: "center",
-    "&:hover": {
-      backgroundColor: purple[700],
-    },
-  },
-}))(Button);
-
-const LoginForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  width: 56vh;
-  height: 77vh;
-  background: #ffffff;
-  margin: 9vh auto;
-  border-radius: 1vh;
-  padding: 2.5vh;
-`;
-const TextBox = styled.input`
-  align-self: center;
-  background-color: #ffffff;
-  border: solid 1px #ac8eca;
-  padding: 1.1vh 1.3vh;
-  margin: 0.8vh 0;
-  width: 45vh;
-`;
-
-const LoginImg = styled.img`
-  align-self: center;
-  height: 40vh;
-`;
-const Title = styled.h2`
-  font-size: 3vh;
-  margin: 1vh;
-  text-align: center;
-  line-height: 0.8;
-  color: #322f3d;
-`;
 const Loading = styled.div`
   @keyframes lds-dual-ring {
     0% {
@@ -76,6 +31,78 @@ const Loading = styled.div`
   display: flex;
   margin: auto;
 `;
+
+const LoginForm = styled.form`
+  @media (max-width: 450px) {
+    width: auto;
+    margin: 9vh 1vh 0 1vh;
+  }
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 56vh;
+  height: 77vh;
+  background: #ffffff;
+  margin: 9vh auto;
+  border-radius: 1vh;
+  padding: 2.5vh;
+`;
+
+const LoginImg = styled.img`
+  @media (max-width: 450px) {
+    height: 30vh;
+  }
+  @media (max-width: 250px) {
+    height: 15vh;
+  }
+  align-self: center;
+  margin: 0.5vh;
+  height: 40vh;
+`;
+const TextBox = styled.input`
+  align-self: center;
+  background-color: #ffffff;
+  border-radius: 0.5vh;
+  border: solid 1px #322f3d;
+  padding: 1.1vh 1.3vh;
+  margin: 0.8vh 0;
+  width: 80%;
+  height: 1.5vh;
+  font-size: 2vh;
+`;
+const ColorButton = withStyles((theme) => ({
+  root: {
+    color: "#ffffff",
+    backgroundColor: "#322f3d",
+    margin: "1vh",
+    width: "23vh",
+    height: "4.5vh",
+    alignSelf: "center",
+    fontSize: "1.7vh",
+    "&:hover": {
+      backgroundColor: "#6f6b7c",
+    },
+  },
+}))(Button);
+
+const Title = styled.h2`
+  font-size: 3vh;
+  margin: 2vh 1vh;
+  text-align: center;
+  line-height: 0.8;
+  color: #322f3d;
+`;
+
+const BtnContainer = styled.div`
+  @media (max-width: 450px) {
+    flex-direction: column;
+    margin: 1vh;
+  }
+  display: flex;
+  justify-content: center;
+  margin-top: 1vh;
+`;
+
 //**************************
 //Styles
 //**************************
@@ -124,19 +151,24 @@ export class Login extends Component {
                 name="email"
                 value={this.state.email}
                 onChange={(e) => this.onChange(e)}
+                required
               />
               <TextBox
                 type="password"
                 placeholder="Password"
                 name="password"
-                minLength="6"
+                minLength="4"
                 value={this.state.password}
                 onChange={(e) => this.onChange(e)}
+                required
               />
-              <ColorButton type="submit">Login</ColorButton>
-              <ColorButton onClick={(e) => this.routeChange(`/register`)}>
-                Register
-              </ColorButton>
+              <BtnContainer>
+                <ColorButton type="submit">Login</ColorButton>
+                <ColorButton onClick={(e) => this.routeChange(`/register`)}>
+                  Register
+                </ColorButton>
+              </BtnContainer>
+
               <Alert />
             </LoginForm>
           ) : (

@@ -9,7 +9,7 @@ import setAuthToken from "./utils/setAuthToken";
 import { loadUser } from "./actions/auth";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import UserProfile from "./components/UserProfile";
+import PrivateRoute from "./components/routering/PrivateRoute";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -27,8 +27,7 @@ function App() {
           <Route exact path="/" component={Login} />
           <Route path="/register" component={Register} />
           <Switch>
-            <Route path="/todolist" component={Body} />
-            <Route path="/userprofile" component={UserProfile} />
+            <PrivateRoute path="/todolist" component={Body} />
           </Switch>
         </Router>
       </Provider>

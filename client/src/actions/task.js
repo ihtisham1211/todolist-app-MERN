@@ -1,6 +1,51 @@
 import axios from "axios";
 import { setAlert } from "./alert";
 import { url } from "../utils/proxy";
+
+//**********************************
+//***********addList
+//**********************************
+export const addList = (token, listName) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": token,
+    },
+  };
+  const body = JSON.stringify({ listName });
+  try {
+    const res = await axios.post(url + "/api/task/add_list", body, config);
+
+    dispatch(getData(token));
+    dispatch(setAlert("List added", "success"));
+  } catch (error) {
+    dispatch(setAlert("Failed To Add List", "error"));
+  }
+};
+
+//**********************************
+//***********getAllTasks
+//**********************************
+export const getData = (token) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": token,
+    },
+  };
+  try {
+    const res = await axios.get(url + "/api/task/get_lists", config);
+
+    dispatch({
+      type: "GET_All_TASKS",
+      payload: res.data,
+    });
+    console.log("getData");
+  } catch (e) {
+    dispatch(setAlert("Failed To Get data", "error"));
+  }
+};
+
 //**********************************
 //***********getAllTasks
 //**********************************
