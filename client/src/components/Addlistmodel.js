@@ -90,8 +90,8 @@ export class Addlistmodel extends Component {
             required
           />
           <ColorButton type="submit">Add to List</ColorButton>
+          <AlertM />
         </FormBody>
-        <AlertM />
       </Overlay>
     );
   }
