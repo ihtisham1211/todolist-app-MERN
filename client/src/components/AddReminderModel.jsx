@@ -134,6 +134,9 @@ const AddBtn = styled.button`
   &:hover {
     opacity: 0.8;
   }
+  &:disabled {
+    color: grey;
+  }
   margin: 0 0 0 auto;
   border: none;
   background-color: transparent;
@@ -185,7 +188,12 @@ class AddReminderModel extends Component {
           <TitleBar>
             <CancelBtn onClick={() => this.routeChange()}>Cancel</CancelBtn>
             <TitleRem>New Reminder</TitleRem>
-            <AddBtn onClick={(e) => this.onSubmit(e)}>Add</AddBtn>
+            <AddBtn
+              onClick={(e) => this.onSubmit(e)}
+              disabled={!this.state.title}
+            >
+              Add
+            </AddBtn>
           </TitleBar>
 
           <FormBody>

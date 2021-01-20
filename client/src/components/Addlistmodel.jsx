@@ -111,7 +111,6 @@ export class Addlistmodel extends Component {
     const { listName } = this.state;
     e.preventDefault();
     this.props.addList(this.props.token, listName);
-    console.log("run");
     this.routeChange(`/todolist`);
   }
   render() {
