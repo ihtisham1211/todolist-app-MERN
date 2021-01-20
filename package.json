@@ -15,13 +15,12 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.4",
     "nodemon": "^2.0.6",
-    "request": "^2.88.2",
-    "prettier": "2.2.1"
+    "prettier": "2.2.1",
+    "request": "^2.88.2"
   },
   "scripts": {
     "start": "nodemon server.js"
   },
   "author": "ihtisham",
-  "license": "ISC",
-  "devDependencies": {}
+  "license": "ISC"
 }

@@ -1,0 +1,24 @@
+.MuiInputBase-input::placeholder {
+  color: grey !important;
+}
+.MuiInputBase-input {
+  color: grey !important;
+}
+.MuiInputLabel-root {
+  color: grey !important;
+}
+.MuiInputLabel-formControl {
+  color: grey !important;
+}
+.MuiInput-underline::after {
+  border-bottom: 2px solid #2d62f3;
+}
+.MuiInput-underline {
+  border-bottom: 1px solid grey;
+}
+.MuiInput-underline::before {
+  border-bottom: 1px solid grey;
+}
+.MuiSvgIcon-root {
+  color: grey;
+}

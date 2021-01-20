@@ -4,57 +4,18 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import "date-fns";
 import { v4 as uuid } from "uuid";
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 //components
 import List from "./List";
-import Addlistmodel from "./Addlistmodel";
 //functions
-import { logout } from "../actions/auth";
-import { themeChange } from "../actions/user";
+import { handleClicked, editClick } from "../actions/user";
 import { getData } from "../actions/task";
 //icons
 import { BiSearchAlt2 } from "react-icons/bi";
 import { MdToday } from "react-icons/md";
 import { BsCalendar } from "react-icons/bs";
 import { IoMdAddCircle } from "react-icons/io";
-import AddReminderModel from "./AddReminderModel";
 
-const StyledMenu = withStyles({
-  paper: {
-    backgroundColor: "#111",
-    borderRadius: "1vh",
-  },
-})((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "center",
-    }}
-    transformOrigin={{
-      vertical: "top",
-      horizontal: "center",
-    }}
-    {...props}
-  />
-));
-const StyledMenuItem = withStyles((theme) => ({
-  root: {
-    "&:focus": {
-      backgroundColor: "#3b3b3b",
-    },
-    "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-      color: "#e5e5e5",
-    },
-  },
-}))(MenuItem);
+import Header from "./header";
 
 const Loading = styled.div`
   @keyframes lds-dual-ring {
@@ -82,7 +43,7 @@ const Loading = styled.div`
 const BodyStyle = styled.div`
   @media (max-width: 400px) {
     width: auto;
-    margin: 5vh 1vh 0 1vh;
+    margin: 2vh 1vh 0 1vh;
   }
   display: flex;
   flex-direction: column;
@@ -94,11 +55,7 @@ const BodyStyle = styled.div`
   border-radius: 1vh;
   padding: 1.5vh;
 `;
-const UserImage = styled.img`
-  border-radius: 5vh;
-  height: 6vh;
-  width: 6vh;
-`;
+
 //***********************************
 // Search
 //***********************************
@@ -195,6 +152,10 @@ const MyList = styled.h2`
 // List Dropdown
 //***********************************
 const ListConatiner = styled.div`
+  &:last-child {
+    border: none;
+  }
+
   display: flex;
   flex-direction: column;
   margin: 0 1vh 0 1vh;
@@ -245,10 +206,21 @@ const AddandREM = styled.div`
   display: flex;
   align-self: flex-start;
 `;
-const MenuBox = styled.div`
-  display: flex;
-  justify-content: flex-end;
+
+const EditBtn = styled.button`
+  &:hover {
+    opacity: 0.7;
+  }
+  background-color: transparent;
+  border: none;
+  color: ${(props) => (props.editColor ? "#ff2323" : "#2d62f3")};
+  margin: 0 1.5vh 0 auto;
+  font-size: 1.8vh;
 `;
+const EbtnContain = styled.div`
+  display: flex;
+`;
+
 //**************************
 //Styles
 //**************************
@@ -256,15 +228,20 @@ const MenuBox = styled.div`
 export class Body extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      anchorEl: null,
-      isOpen: false,
-      isOpen_rem: false,
-    };
+    this.state = {};
   }
   routeChange(path) {
     this.props.history.push(path);
   }
+
+  editClicked() {
+    this.props.editClick(this.props.edit);
+  }
+  displayPage(listId) {
+    this.props.handleClicked(listId);
+    this.routeChange(`/displaytask`);
+  }
+
   componentDidMount() {
     this.props.getData(this.props.token);
   }
@@ -273,36 +250,7 @@ export class Body extends Component {
       <>
         {this.props.loading ? (
           <div>
-            <MenuBox>
-              <Button
-                aria-controls="customized-menu"
-                aria-haspopup="true"
-                onClick={(e) => this.setState({ anchorEl: e.currentTarget })}
-              >
-                {this.props.img.length === 0 || this.props.img === null ? (
-                  <UserImage
-                    alt="userImage"
-                    src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
-                  />
-                ) : (
-                  <UserImage alt="userImage" src={this.props.img} />
-                )}
-              </Button>
-              <StyledMenu
-                id="customized-menu"
-                anchorEl={this.state.anchorEl}
-                keepMounted
-                open={Boolean(this.state.anchorEl)}
-                onClose={() => this.setState({ anchorEl: null })}
-              >
-                <StyledMenuItem onClick={() => this.props.logout()}>
-                  <ListItemIcon>
-                    <ExitToAppOutlinedIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Log out" />
-                </StyledMenuItem>
-              </StyledMenu>
-            </MenuBox>
+            <Header />
             <BodyStyle>
               {/*SearchBar*/}
               <SearchBar>
@@ -334,7 +282,16 @@ export class Body extends Component {
                   <Text>Scheduled</Text>
                 </BoxStyle>
               </ContainBox>
-              <MyList>My Lists</MyList>
+              <EbtnContain>
+                <MyList>My Lists</MyList>
+                <EditBtn
+                  editColor={this.props.edit}
+                  onClick={() => this.editClicked()}
+                >
+                  Edit
+                </EditBtn>
+              </EbtnContain>
+
               <ListConatiner>
                 {this.props.taskList.length !== 0 ? (
                   this.props.taskList.map((list) => {
@@ -343,6 +300,8 @@ export class Body extends Component {
                         key={uuid()}
                         name={list.listName}
                         task={list.taskList.length}
+                        id={list._id}
+                        displayPage={this.displayPage.bind(this)}
                       />
                     );
                   })
@@ -352,24 +311,17 @@ export class Body extends Component {
               </ListConatiner>
               <ContainBtn>
                 <AddandREM>
-                  <RemIcon>
+                  <RemIcon onClick={() => this.routeChange(`/addrem`)}>
                     <IoMdAddCircle />
                   </RemIcon>
-                  <AddRem onClick={() => this.setState({ isOpen_rem: true })}>
+                  <AddRem onClick={() => this.routeChange(`/addrem`)}>
                     New Reminder
                   </AddRem>
                 </AddandREM>
-                <AddReminderModel
-                  open={this.state.isOpen_rem}
-                  onClose={() => this.setState({ isOpen_rem: false })}
-                />
-                <AddList onClick={() => this.setState({ isOpen: true })}>
+
+                <AddList onClick={() => this.routeChange(`/addlist`)}>
                   Add List
                 </AddList>
-                <Addlistmodel
-                  open={this.state.isOpen}
-                  onClose={() => this.setState({ isOpen: false })}
-                />
               </ContainBtn>
             </BodyStyle>
           </div>
@@ -384,14 +336,14 @@ export class Body extends Component {
 const mapStateToProps = (state) => ({
   token: state.auth.token,
   userId: state.auth.user._id,
-  img: state.auth.user.image,
   loading: state.user.loading,
   isAuthenticated: state.auth.isAuthenticated,
   taskList: state.task.taskList,
+  edit: state.user.editList,
 });
 
 export default connect(mapStateToProps, {
-  logout,
-  themeChange,
+  handleClicked,
   getData,
+  editClick,
 })(Body);

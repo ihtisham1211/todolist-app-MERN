@@ -10,6 +10,9 @@ import { loadUser } from "./actions/auth";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import PrivateRoute from "./components/routering/PrivateRoute";
+import DisplayTasks from "./components/DisplayTasks";
+import Addlistmodel from "./components/Addlistmodel";
+import AddReminderModel from "./components/AddReminderModel";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -28,6 +31,9 @@ function App() {
           <Route path="/register" component={Register} />
           <Switch>
             <PrivateRoute path="/todolist" component={Body} />
+            <PrivateRoute path="/displaytask" component={DisplayTasks} />
+            <PrivateRoute path="/addlist" component={Addlistmodel} />
+            <PrivateRoute path="/addrem" component={AddReminderModel} />
           </Switch>
         </Router>
       </Provider>

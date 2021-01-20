@@ -3,6 +3,9 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { BsListUl } from "react-icons/bs";
 import { FaGreaterThan } from "react-icons/fa";
+import { IoCloseSharp } from "react-icons/io5";
+import { deleteList } from "../actions/task";
+
 const ListIcon = styled.div`
   display: flex;
   align-self: center;
@@ -44,8 +47,22 @@ const Arrow = styled.div`
   color: gray;
   font-size: 1.5vh;
 `;
+const Cross = styled.button`
+  &:hover {
+    color: white;
+  }
 
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  margin-bottom: 1.2vh;
+  color: #ff2a2a;
+  font-size: 2.4vh;
+`;
 class List extends Component {
+  crossClicked() {
+    this.props.deleteList(this.props.token, this.props.id);
+  }
   render() {
     return (
       <ListBody>
@@ -53,11 +70,20 @@ class List extends Component {
           <BsListUl />
         </ListIcon>
         <ContainTNA>
-          <Text>{this.props.name}</Text>
+          <Text onClick={(e) => this.props.displayPage(this.props.id)}>
+            {this.props.name}
+          </Text>
           <Number>{this.props.task}</Number>
           <Arrow>
             <FaGreaterThan />
           </Arrow>
+          {this.props.edit ? (
+            <Cross onClick={() => this.crossClicked()}>
+              <IoCloseSharp />
+            </Cross>
+          ) : (
+            <div />
+          )}
         </ContainTNA>
       </ListBody>
     );
@@ -65,7 +91,10 @@ class List extends Component {
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    edit: state.user.editList,
+    token: state.auth.token,
+  };
 }
 
-export default connect(mapStateToProps)(List);
+export default connect(mapStateToProps, { deleteList })(List);

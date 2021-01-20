@@ -1,5 +1,5 @@
 const initialState = {
-  totalList: "",
+  taskList: "",
 };
 
 export default function (state = initialState, action) {

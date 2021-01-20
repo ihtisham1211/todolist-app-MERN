@@ -54,16 +54,39 @@ export const updateUser = (id, token, name, email, password, image) => async (
   }
 };
 //**********************************
-//***********themeChange
+//***********handleClicked
 //**********************************
-export const themeChange = (theme) => async (dispatch) => {
-  if (theme === true) {
+export const handleClicked = (ListId) => async (dispatch) => {
+  dispatch({
+    type: "CLICKED",
+    payload: ListId,
+  });
+};
+//**********************************
+//***********editClick
+//**********************************
+export const editClick = (edit) => async (dispatch) => {
+  if (edit === true) {
     dispatch({
-      type: "DARK",
+      type: "EDIT_OFF",
     });
   } else {
     dispatch({
-      type: "LIGHT",
+      type: "EDIT_ON",
+    });
+  }
+};
+//**********************************
+//***********editClickDot
+//**********************************
+export const editClickDot = (edit) => async (dispatch) => {
+  if (edit === true) {
+    dispatch({
+      type: "EDITLIST_OFF",
+    });
+  } else {
+    dispatch({
+      type: "EDITLIST_ON",
     });
   }
 };
