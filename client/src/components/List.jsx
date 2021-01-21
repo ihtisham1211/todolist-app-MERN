@@ -20,6 +20,9 @@ const ListBody = styled.div`
   &:hover {
     opacity: 0.7;
   }
+  &:last-child {
+    border: none;
+  }
   display: flex;
   height: 5vh;
   padding: 1vh;
@@ -32,6 +35,7 @@ const ContainTNA = styled.div`
   width: 100%;
 `;
 const Text = styled.div`
+  cursor: pointer;
   margin-left: 1vh;
   color: #e5e5e5;
   font-size: 2vh;
@@ -46,14 +50,13 @@ const Arrow = styled.div`
   margin: 0.5vh 0.5vh 0.5vh 1vh;
   color: gray;
   font-size: 1.5vh;
+  cursor: pointer;
 `;
-const Cross = styled.button`
+const Cross = styled.div`
   &:hover {
     color: white;
   }
-
-  border: none;
-  background-color: transparent;
+  cursor: pointer;
   padding: 0;
   margin-bottom: 1.2vh;
   color: #ff2a2a;

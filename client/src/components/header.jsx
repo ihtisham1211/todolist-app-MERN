@@ -12,8 +12,9 @@ import { logout } from "../actions/auth";
 
 const StyledMenu = withStyles({
   paper: {
-    backgroundColor: "#111",
+    backgroundColor: "#1f1f1f",
     borderRadius: "1vh",
+    marginLeft: "3vh",
   },
 })((props) => (
   <Menu
@@ -21,23 +22,39 @@ const StyledMenu = withStyles({
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: "bottom",
-      horizontal: "center",
+      horizontal: "left",
     }}
     transformOrigin={{
       vertical: "top",
-      horizontal: "center",
+      horizontal: "right",
     }}
     {...props}
   />
 ));
+
 const StyledMenuItem = withStyles((theme) => ({
   root: {
     "&:focus": {
-      backgroundColor: "#3b3b3b",
+      backgroundColor: "#3c3c3c",
     },
-    "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-      color: "#e5e5e5",
+    "& .MuiSvgIcon-fontSizeSmall": {
+      color: "#eee",
+      margin: "0.2vh 0 0.2vh auto ",
+      fontSize: "2.5vh",
     },
+    "& .MuiListItemText-primary": {
+      color: "#eee",
+      margin: "0.2vh 0 0.2vh 0 ",
+      fontSize: "2.2vh",
+    },
+    "&:last-child": {
+      borderBottom: "none",
+    },
+    padding: "0.2vh 1.2vh 0.2vh 1.2vh",
+    borderBottom: "0.5px solid grey",
+    margin: "0",
+    minHeight: "0",
+    letterSpacing: "0",
   },
 }))(MenuItem);
 
@@ -82,10 +99,10 @@ class Header extends Component {
           onClose={() => this.setState({ anchorEl: null })}
         >
           <StyledMenuItem onClick={() => this.props.logout()}>
+            <ListItemText primary="Log out" />
             <ListItemIcon>
               <ExitToAppOutlinedIcon fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary="Log out" />
           </StyledMenuItem>
         </StyledMenu>
       </MenuBox>

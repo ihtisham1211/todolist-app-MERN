@@ -16,44 +16,22 @@ import Tasks from "./Tasks";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { editClickDot } from "../actions/user";
+import Header from "./header";
 
-const StyledMenu = withStyles({
-  paper: {
-    backgroundColor: "#111",
-    borderRadius: "1vh",
-  },
-})((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "center",
-    }}
-    transformOrigin={{
-      vertical: "top",
-      horizontal: "center",
-    }}
-    {...props}
-  />
-));
-
-const StyledMenuItem = withStyles((theme) => ({
+const ButtonDot = withStyles((theme) => ({
   root: {
-    "&:focus": {
-      backgroundColor: "#3b3b3b",
-    },
-    "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-      color: "#e5e5e5",
-    },
+    minWidth: "0",
+    padding: "0",
+    marginRight: "0.5vh",
+    lineHeight: "0",
   },
-}))(MenuItem);
+}))(Button);
 
 const StyledMenuDot = withStyles({
   paper: {
     backgroundColor: "#1f1f1f",
     borderRadius: "1vh",
-    margin: "0 4.5vh 0 4.5vh",
+    marginLeft: "3vh",
   },
 })((props) => (
   <Menu
@@ -61,7 +39,7 @@ const StyledMenuDot = withStyles({
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: "bottom",
-      horizontal: "center",
+      horizontal: "left",
     }}
     transformOrigin={{
       vertical: "top",
@@ -76,19 +54,24 @@ const StyledMenuItemDot = withStyles((theme) => ({
     "&:focus": {
       backgroundColor: "#3c3c3c",
     },
-    "& .MuiListItemIcon-root": {
-      color: "white",
-      margin: "0.2vh 0 0.2vh 90% ",
+    "& .MuiSvgIcon-fontSizeSmall": {
+      color: "#eee",
+      margin: "0.2vh 0 0.2vh auto ",
+      fontSize: "1.8vh",
     },
     "& .MuiListItemText-primary": {
-      color: "white",
+      color: "#eee",
       margin: "0.2vh 0 0.2vh 0 ",
+      fontSize: "1.6vh",
     },
-    borderBottom: "0.5px solid grey",
     "&:last-child": {
       borderBottom: "none",
-      color: "red",
     },
+    padding: "0.2vh 1.2vh 0.2vh 1.2vh",
+    borderBottom: "0.5px solid grey",
+    margin: "0",
+    minHeight: "0",
+    letterSpacing: "0",
   },
 }))(MenuItem);
 
@@ -107,11 +90,6 @@ const BodyStyle = styled.div`
   border-radius: 1vh;
   padding: 1.5vh;
 `;
-const UserImage = styled.img`
-  border-radius: 5vh;
-  height: 6vh;
-  width: 6vh;
-`;
 const MenuBox = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -120,28 +98,32 @@ const ContainBtn = styled.div`
   display: flex;
   margin-top: auto;
   width: 100%;
-  margin-bottom: 0;
+  margin-bottom: 1vh;
 `;
-const AddRem = styled.button`
+const AddRem = styled.div`
   border: none;
   background-color: transparent;
   color: #2d62f3;
   font-size: 1.5vh;
+  margin-left: 0.5vh;
 `;
 const RemIcon = styled.div`
   display: flex;
   align-self: center;
-  font-size: 3vh;
+  font-size: 2vh;
   border-radius: 4vh;
-  margin: 1vh auto 1vh 1vh;
+  margin: 0;
   color: #2d62f3;
 `;
+
 const AddandREM = styled.div`
   &:hover {
     opacity: 0.7;
   }
+  cursor: pointer;
   display: flex;
   align-self: flex-start;
+  align-items: center;
 `;
 const BackTitleContain = styled.div`
   display: flex;
@@ -149,20 +131,20 @@ const BackTitleContain = styled.div`
   margin-left: 0.5vh;
   width: 100%;
 `;
+const ContainBackList = styled.div`
+  display: flex;
+  cursor: pointer;
+  margin: auto auto 0 0.5vh;
+  align-items: center;
+`;
 const BackBTN = styled.div`
-  &:hover {
-    opacity: 0.7;
-  }
-
   color: #4271f1;
-  font-size: 2vh;
   margin-top: 0.4vh;
-  margin-right: 0.4vh;
+  font-size: 2vh;
 `;
 const ListTitle = styled.h3`
   color: #2d62f3;
   font-size: 2.2vh;
-  margin-right: auto;
 `;
 const ListName = styled.h1`
   margin: 0 0 0 2vh;
@@ -194,8 +176,6 @@ export class DisplayTasks extends Component {
     this.state = {
       label: "",
       displayTask: [],
-      isOpen_rem: false,
-      anchorEl: null,
       anchor: null,
     };
   }
@@ -223,55 +203,22 @@ export class DisplayTasks extends Component {
   render() {
     return (
       <div>
-        <MenuBox>
-          <Button
-            aria-controls="customized-menu"
-            aria-haspopup="true"
-            onClick={(e) => this.setState({ anchorEl: e.currentTarget })}
-          >
-            {this.props.img.length === 0 || this.props.img === null ? (
-              <UserImage
-                alt="userImage"
-                src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
-              />
-            ) : (
-              <UserImage alt="userImage" src={this.props.img} />
-            )}
-          </Button>
-          <StyledMenu
-            id="customized-menu"
-            anchorEl={this.state.anchorEl}
-            keepMounted
-            open={Boolean(this.state.anchorEl)}
-            onClose={() => this.setState({ anchorEl: null })}
-          >
-            <StyledMenuItem onClick={() => this.props.logout()}>
-              <ListItemIcon>
-                <ExitToAppOutlinedIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Log out" />
-            </StyledMenuItem>
-          </StyledMenu>
-        </MenuBox>
+        <Header />
         <BodyStyle>
           <BackTitleContain>
-            <BackBTN
+            <ContainBackList
               onClick={() => {
                 this.routeChange(`/todolist`);
               }}
             >
-              <FaLessThan />
-            </BackBTN>
-            <ListTitle
-              onClick={() => {
-                this.routeChange(`/todolist`);
-              }}
-            >
-              Lists
-            </ListTitle>
+              <BackBTN>
+                <FaLessThan />
+              </BackBTN>
+              <ListTitle>Lists</ListTitle>
+            </ContainBackList>
 
             <MenuBox>
-              <Button
+              <ButtonDot
                 aria-controls="customized-menu"
                 aria-haspopup="true"
                 onClick={(e) => this.setState({ anchor: e.currentTarget })}
@@ -279,7 +226,7 @@ export class DisplayTasks extends Component {
                 <Dropbtn>
                   <HiOutlineDotsCircleHorizontal />
                 </Dropbtn>
-              </Button>
+              </ButtonDot>
               <StyledMenuDot
                 id="customized-menu"
                 anchorEl={this.state.anchor}

@@ -1,8 +1,7 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import AlertM from "./routering/Alert";
 import { getCurrentDate } from "../utils/dateFunction";
 import DateFnsUtils from "@date-io/date-fns";
@@ -11,18 +10,19 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import { v4 as uuid } from "uuid";
 import { addTask } from "../actions/task";
 import TextField from "@material-ui/core/TextField";
 import "./editmaterialui.css";
 import Header from "./header";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import { v4 as uuid } from "uuid";
 
 const TextFieldEdit = withStyles((theme) => ({
   root: {
-    margin: "1vh",
+    margin: "1vh 0 1vh 0",
     "& .MuiTextField-root": {
       margin: theme.spacing(1),
       width: "25ch",
@@ -45,47 +45,12 @@ const TextFieldEdit = withStyles((theme) => ({
 }))(TextField);
 
 const Date = withStyles((theme) => ({
-  root: {
-    margin: "1vh",
-  },
+  root: {},
 }))(KeyboardDatePicker);
 
 const Time = withStyles((theme) => ({
-  root: {
-    margin: "1vh",
-  },
+  root: {},
 }))(KeyboardTimePicker);
-
-const StyledMenu = withStyles({
-  paper: {
-    backgroundColor: "#111",
-    borderRadius: "1vh",
-  },
-})((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "left",
-    }}
-    transformOrigin={{
-      vertical: "top",
-      horizontal: "left",
-    }}
-    {...props}
-  />
-));
-const StyledMenuItem = withStyles((theme) => ({
-  root: {
-    "&:focus": {
-      backgroundColor: "#3b3b3b",
-    },
-    "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-      color: "#e5e5e5",
-    },
-  },
-}))(MenuItem);
 
 const Body = styled.div`
   @media (max-width: 400px) {
@@ -117,7 +82,7 @@ const CancelBtn = styled.button`
   &:hover {
     opacity: 0.8;
   }
-
+  cursor: pointer;
   margin: 0 auto 0 0;
   border: none;
   background-color: transparent;
@@ -137,6 +102,7 @@ const AddBtn = styled.button`
   &:disabled {
     color: grey;
   }
+  cursor: pointer;
   margin: 0 0 0 auto;
   border: none;
   background-color: transparent;
@@ -167,6 +133,13 @@ class AddReminderModel extends Component {
       [e.target.name]: e.target.value,
     });
   }
+  onChangeSelect(e) {
+    const listData = e.target.value.split("|");
+    this.setState({
+      list: listData[1],
+      listId: listData[0],
+    });
+  }
   onSubmit(e) {
     const { selectedDateNTime, title, description, listId } = this.state;
     e.preventDefault();
@@ -179,7 +152,6 @@ class AddReminderModel extends Component {
     );
     this.routeChange();
   }
-
   render() {
     return (
       <div>
@@ -213,42 +185,24 @@ class AddReminderModel extends Component {
               onChange={(e) => this.onChange(e)}
             />
 
-            <TextFieldEdit
-              name="listName"
-              label="List"
-              value={this.state.list}
-              placeholder={"Select List"}
-              onChange={(e) => this.onChange(e)}
-              aria-controls="customized-menu"
-              aria-haspopup="true"
-              onClick={(e) => this.setState({ anchorEl: e.currentTarget })}
-              required
-            />
-            <StyledMenu
-              id="customized-menu"
-              anchorEl={this.state.anchorEl}
-              keepMounted
-              open={Boolean(this.state.anchorEl)}
-              onClose={() => this.setState({ anchorEl: null })}
-            >
-              {this.props.taskList.map((list) => {
-                return (
-                  <StyledMenuItem
-                    key={uuid()}
-                    onClick={() =>
-                      this.setState({
-                        list: list.listName,
-                        listId: list._id,
-                        anchorEl: null,
-                      })
-                    }
-                  >
-                    <ListItemText primary={list.listName} />
-                  </StyledMenuItem>
-                );
-              })}
-            </StyledMenu>
+            <FormControl>
+              <InputLabel id="demo-simple-select-label">List</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                onChange={(e) => this.onChangeSelect(e)}
+              >
+                {this.props.taskList.map((list) => {
+                  var setVal = list._id + "|" + list.listName;
 
+                  return (
+                    <MenuItem key={uuid()} value={setVal}>
+                      {list.listName}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Date
                 disableToolbar

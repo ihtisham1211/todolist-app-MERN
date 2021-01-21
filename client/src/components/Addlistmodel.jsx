@@ -65,6 +65,7 @@ const CancelBtn = styled.button`
   &:hover {
     opacity: 0.8;
   }
+  cursor: pointer;
 
   margin: 0 auto 0 0;
   border: none;
@@ -85,6 +86,8 @@ const AddBtn = styled.button`
   &:disabled {
     color: grey;
   }
+  cursor: pointer;
+
   margin: 0 0 0 auto;
   border: none;
   background-color: transparent;

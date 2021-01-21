@@ -2,7 +2,8 @@
   color: grey !important;
 }
 .MuiInputBase-input {
-  color: grey !important;
+  color: #f1e9e9 !important;
+  font-weight: bold;
 }
 .MuiInputLabel-root {
   color: grey !important;
@@ -11,7 +12,7 @@
   color: grey !important;
 }
 .MuiInput-underline::after {
-  border-bottom: 2px solid #2d62f3;
+  border-bottom: none !important;
 }
 .MuiInput-underline {
   border-bottom: 1px solid grey;
@@ -19,6 +20,13 @@
 .MuiInput-underline::before {
   border-bottom: 1px solid grey;
 }
+
 .MuiSvgIcon-root {
   color: grey;
+}
+.MuiPaper-root {
+  background-color: #1f1f1f !important;
+}
+.MuiButtonBase-root {
+  color: whitesmoke !important;
 }

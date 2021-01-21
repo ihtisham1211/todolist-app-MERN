@@ -16,6 +16,7 @@ import { BsCalendar } from "react-icons/bs";
 import { IoMdAddCircle } from "react-icons/io";
 
 import Header from "./header";
+import { getCurrentDate } from "../utils/dateFunction";
 
 const Loading = styled.div`
   @keyframes lds-dual-ring {
@@ -70,7 +71,9 @@ const SearchBar = styled.div`
 `;
 const Searchfield = styled.input`
   border: none;
-  width: auto;
+  width: 100%;
+  height: auto;
+  border-radius: 1vh;
   background-color: #3b3b3b;
   color: lightgray;
   font-size: 2vh;
@@ -85,11 +88,14 @@ const Seachicon = styled.div`
 //***********************************
 const BoxStyle = styled.div`
   @media (max-width: 400px) {
-    margin-top: 1vh;
+    width: 36vw;
+    height: 24vw;
+    margin: 0 0.5vh 0 0.5vh;
   }
   &:hover {
     opacity: 0.7;
   }
+  cursor: pointer;
   margin-left: auto;
   margin-right: auto;
   background-color: #3b3b3b;
@@ -102,6 +108,9 @@ const IconCountBlock = styled.div`
   display: flex;
 `;
 const TodayIcon = styled.div`
+  @media (max-width: 400px) {
+    font-size: 6vw;
+  }
   display: flex;
   align-self: center;
   background-color: #2d62f3;
@@ -112,6 +121,9 @@ const TodayIcon = styled.div`
   color: #e5e5e5;
 `;
 const ScheduledIcon = styled.div`
+  @media (max-width: 400px) {
+    font-size: 6vw;
+  }
   display: flex;
   align-self: center;
   background-color: #ff2323;
@@ -122,21 +134,24 @@ const ScheduledIcon = styled.div`
   color: #e5e5e5;
 `;
 const Count = styled.div`
+  @media (max-width: 400px) {
+    font-size: 6vw;
+  }
   color: #e5e5e5;
   font-size: 3vh;
   font-weight: bold;
   margin: 1.5vh 1vh 1vh auto;
 `;
 const Text = styled.div`
+  @media (max-width: 400px) {
+    font-size: 5vw;
+  }
   color: lightgray;
   font-size: 2.5vh;
   font-weight: bold;
   margin: 1vh;
 `;
 const ContainBox = styled.div`
-  @media (max-width: 400px) {
-    flex-direction: column;
-  }
   display: flex;
   justify-content: center;
   margin-top: 3vh;
@@ -172,28 +187,28 @@ const ContainBtn = styled.div`
   display: flex;
   margin-top: auto;
   width: 100%;
-  margin-bottom: 0;
+  margin-bottom: 1vh;
 `;
-const AddRem = styled.button`
+const AddRem = styled.div`
   border: none;
   background-color: transparent;
   color: #2d62f3;
   font-size: 1.5vh;
+  margin-left: 0.5vh;
 `;
 const RemIcon = styled.div`
   display: flex;
   align-self: center;
-  font-size: 3vh;
+  font-size: 2vh;
   border-radius: 4vh;
-  margin: 1vh auto 1vh 1vh;
+  margin: 0;
   color: #2d62f3;
 `;
-const AddList = styled.button`
+const AddList = styled.div`
   &:hover {
     opacity: 0.7;
   }
-  border: none;
-  background-color: transparent;
+  cursor: pointer;
   color: #2d62f3;
   font-size: 1.5vh;
   margin-left: auto;
@@ -203,18 +218,19 @@ const AddandREM = styled.div`
   &:hover {
     opacity: 0.7;
   }
+  cursor: pointer;
   display: flex;
   align-self: flex-start;
+  align-items: center;
 `;
 
-const EditBtn = styled.button`
+const EditBtn = styled.div`
   &:hover {
     opacity: 0.7;
   }
-  background-color: transparent;
-  border: none;
-  color: ${(props) => (props.editColor ? "#ff2323" : "#2d62f3")};
-  margin: 0 1.5vh 0 auto;
+  cursor: pointer;
+  color: #2d62f3;
+  margin: 2.5vh 1.5vh 0 auto;
   font-size: 1.8vh;
 `;
 const EbtnContain = styled.div`
@@ -228,7 +244,9 @@ const EbtnContain = styled.div`
 export class Body extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selectedDateNTime: getCurrentDate(),
+    };
   }
   routeChange(path) {
     this.props.history.push(path);
@@ -244,6 +262,7 @@ export class Body extends Component {
 
   componentDidMount() {
     this.props.getData(this.props.token);
+    console.log(this.state.selectedDateNTime);
   }
   render() {
     return (
@@ -310,13 +329,11 @@ export class Body extends Component {
                 )}
               </ListConatiner>
               <ContainBtn>
-                <AddandREM>
-                  <RemIcon onClick={() => this.routeChange(`/addrem`)}>
+                <AddandREM onClick={() => this.routeChange(`/addrem`)}>
+                  <RemIcon>
                     <IoMdAddCircle />
                   </RemIcon>
-                  <AddRem onClick={() => this.routeChange(`/addrem`)}>
-                    New Reminder
-                  </AddRem>
+                  <AddRem>New Reminder</AddRem>
                 </AddandREM>
 
                 <AddList onClick={() => this.routeChange(`/addlist`)}>
