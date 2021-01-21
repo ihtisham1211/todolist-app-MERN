@@ -27,6 +27,34 @@
 .MuiPaper-root {
   background-color: #1f1f1f !important;
 }
+
+/*calander*/
 .MuiButtonBase-root {
-  color: whitesmoke !important;
+  color: #c1c1c1 !important;
+}
+.MuiIconButton-root:hover {
+  background-color: grey !important;
+}
+.MuiPickersCalendarHeader-dayLabel {
+  color: #c1c1c1 !important;
+}
+.MuiPickersSlideTransition-transitionContainer > * {
+  color: #c1c1c1 !important;
+}
+.MuiPickersCalendarHeader-iconButton {
+  background-color: #1f1f1f !important;
+}
+
+/*time*/
+/*.MuiPickersToolbar-toolbar{*/
+/*   background-color: #1f1f1f !important;*/
+/*}*/
+.MuiPickersClockNumber-clockNumber {
+  color: #c1c1c1 !important;
+}
+.MuiPickersClock-clock {
+  background-color: #373636 !important;
+}
+.MuiPickersToolbarText-toolbarBtnSelected {
+  color: #c1c1c1 !important;
 }

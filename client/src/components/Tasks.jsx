@@ -54,6 +54,7 @@ class Tasks extends Component {
   crossClicked() {
     this.props.deleteTask(this.props.token, this.props.listId, this.props.id);
     this.props.loadTasks();
+    this.forceUpdate();
   }
   render() {
     return (

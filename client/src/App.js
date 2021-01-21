@@ -13,6 +13,8 @@ import PrivateRoute from "./components/routering/PrivateRoute";
 import DisplayTasks from "./components/DisplayTasks";
 import Addlistmodel from "./components/Addlistmodel";
 import AddReminderModel from "./components/AddReminderModel";
+import TodayTask from "./components/TodayTask";
+import ScheduledTask from "./components/ScheduledTask";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -34,6 +36,8 @@ function App() {
             <PrivateRoute path="/displaytask" component={DisplayTasks} />
             <PrivateRoute path="/addlist" component={Addlistmodel} />
             <PrivateRoute path="/addrem" component={AddReminderModel} />
+            <PrivateRoute path="/today" component={TodayTask} />
+            <PrivateRoute path="/scheduled" component={ScheduledTask} />
           </Switch>
         </Router>
       </Provider>

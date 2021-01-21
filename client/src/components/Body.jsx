@@ -17,6 +17,8 @@ import { IoMdAddCircle } from "react-icons/io";
 
 import Header from "./header";
 import { getCurrentDate } from "../utils/dateFunction";
+import { SearchResult } from "./SearchResult";
+import Tasks from "./Tasks";
 
 const Loading = styled.div`
   @keyframes lds-dual-ring {
@@ -77,6 +79,7 @@ const Searchfield = styled.input`
   background-color: #3b3b3b;
   color: lightgray;
   font-size: 2vh;
+  outline: none;
 `;
 const Seachicon = styled.div`
   font-size: 2.5vh;
@@ -126,7 +129,7 @@ const ScheduledIcon = styled.div`
   }
   display: flex;
   align-self: center;
-  background-color: #ff2323;
+  background-color: #cf2727;
   font-size: 3vh;
   border-radius: 4vh;
   padding: 1vh;
@@ -246,6 +249,10 @@ export class Body extends Component {
     super(props);
     this.state = {
       selectedDateNTime: getCurrentDate(),
+      isOpen: false,
+      search: "",
+      today: 0,
+      scheduled: 0,
     };
   }
   routeChange(path) {
@@ -259,10 +266,57 @@ export class Body extends Component {
     this.props.handleClicked(listId);
     this.routeChange(`/displaytask`);
   }
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  }
 
+  setNumbers() {
+    // Scheduled
+    this.props.taskList.map((l) => {
+      return l.taskList.map((t) => {
+        const dts = new Date(t.date);
+        if (this.state.selectedDateNTime.getFullYear() <= dts.getFullYear()) {
+          if (this.state.selectedDateNTime.getMonth() <= dts.getMonth()) {
+            if (this.state.selectedDateNTime.getDate() < dts.getDate()) {
+              this.setState({});
+              this.setState((state) => ({
+                scheduled: state.scheduled + 1,
+              }));
+            }
+          }
+        }
+      });
+    });
+    //today
+    this.props.taskList.map((l) => {
+      return l.taskList.map((t) => {
+        const dts = new Date(t.date);
+        if (
+          this.state.selectedDateNTime.getDate() === dts.getDate() &&
+          this.state.selectedDateNTime.getMonth() === dts.getMonth() &&
+          this.state.selectedDateNTime.getFullYear() === dts.getFullYear()
+        ) {
+          this.setState((state) => ({
+            today: state.today + 1,
+          }));
+        }
+      });
+    });
+  }
   componentDidMount() {
     this.props.getData(this.props.token);
-    console.log(this.state.selectedDateNTime);
+    this.setNumbers();
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.taskList.length !== nextProps.taskList.length) {
+      this.setState({
+        today: 0,
+        scheduled: 0,
+      });
+      this.setNumbers();
+    }
   }
   render() {
     return (
@@ -270,33 +324,48 @@ export class Body extends Component {
         {this.props.loading ? (
           <div>
             <Header />
+            <SearchResult
+              key={uuid()}
+              open={this.state.isOpen}
+              onClose={() => this.setState({ isOpen: false })}
+              searchText={this.state.search}
+              taskData={this.props.taskList}
+            />
             <BodyStyle>
               {/*SearchBar*/}
               <SearchBar>
                 <Seachicon>
                   <BiSearchAlt2 />
                 </Seachicon>
-                <Searchfield placeholder="Search" />
+                <Searchfield
+                  placeholder="Search"
+                  onClick={() => this.setState({ isOpen: true })}
+                  value={this.state.search}
+                  name="search"
+                  onChange={(e) => this.onChange(e)}
+                  autocomplete="off"
+                />
               </SearchBar>
+
               {/*Container box for boxes*/}
               <ContainBox>
                 {/*Today*/}
-                <BoxStyle>
+                <BoxStyle onClick={() => this.routeChange(`/today`)}>
                   <IconCountBlock>
                     <TodayIcon>
                       <MdToday />
                     </TodayIcon>
-                    <Count>0</Count>
+                    <Count>{this.state.today}</Count>
                   </IconCountBlock>
                   <Text>Today</Text>
                 </BoxStyle>
                 {/*Scheduled*/}
-                <BoxStyle>
+                <BoxStyle onClick={() => this.routeChange(`/scheduled`)}>
                   <IconCountBlock>
                     <ScheduledIcon>
                       <BsCalendar />
                     </ScheduledIcon>
-                    <Count>0</Count>
+                    <Count>{this.state.scheduled}</Count>
                   </IconCountBlock>
                   <Text>Scheduled</Text>
                 </BoxStyle>
@@ -311,23 +380,27 @@ export class Body extends Component {
                 </EditBtn>
               </EbtnContain>
 
-              <ListConatiner>
-                {this.props.taskList.length !== 0 ? (
-                  this.props.taskList.map((list) => {
-                    return (
-                      <List
-                        key={uuid()}
-                        name={list.listName}
-                        task={list.taskList.length}
-                        id={list._id}
-                        displayPage={this.displayPage.bind(this)}
-                      />
-                    );
-                  })
-                ) : (
-                  <div>" "</div>
-                )}
-              </ListConatiner>
+              {this.props.taskList.length === 0 ? (
+                <div />
+              ) : (
+                <ListConatiner>
+                  {this.props.taskList.length !== 0 ? (
+                    this.props.taskList.map((list) => {
+                      return (
+                        <List
+                          key={uuid()}
+                          name={list.listName}
+                          task={list.taskList.length}
+                          id={list._id}
+                          displayPage={this.displayPage.bind(this)}
+                        />
+                      );
+                    })
+                  ) : (
+                    <div />
+                  )}
+                </ListConatiner>
+              )}
               <ContainBtn>
                 <AddandREM onClick={() => this.routeChange(`/addrem`)}>
                   <RemIcon>
