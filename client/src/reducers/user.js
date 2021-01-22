@@ -1,26 +1,16 @@
 import { AUTH_ERROR, LOGIN_FAIL, LOGOUT } from "../actions/types";
 
 const initialState = {
-  clicked: "",
   loading: false,
   editList: false,
   editTask: false,
+  checkData: false,
 };
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
   //action has the coming data init
   switch (type) {
-    case "CLICKED":
-      return {
-        ...state,
-        clicked: payload,
-      };
-    case "UNCLICKED":
-      return {
-        ...state,
-        clicked: "",
-      };
     case "EDIT_ON":
       return {
         ...state,
@@ -41,6 +31,11 @@ export default function (state = initialState, action) {
         ...state,
         editTask: false,
       };
+    case "CHECKDATA":
+      return {
+        ...state,
+        checkData: true,
+      };
     case "SET_LOADING":
       return {
         ...state,
@@ -52,6 +47,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: false,
+        checkData: false,
       };
     default:
       return state;

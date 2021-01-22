@@ -53,15 +53,7 @@ export const updateUser = (id, token, name, email, password, image) => async (
     dispatch(setAlert("Failed To Updated", "error"));
   }
 };
-//**********************************
-//***********handleClicked
-//**********************************
-export const handleClicked = (ListId) => async (dispatch) => {
-  dispatch({
-    type: "CLICKED",
-    payload: ListId,
-  });
-};
+
 //**********************************
 //***********editClick
 //**********************************
@@ -89,4 +81,12 @@ export const editClickDot = (edit) => async (dispatch) => {
       type: "EDITLIST_ON",
     });
   }
+};
+//**********************************
+//***********editClickDot
+//**********************************
+export const setcheckData = () => async (dispatch) => {
+  dispatch({
+    type: "CHECKDATA",
+  });
 };

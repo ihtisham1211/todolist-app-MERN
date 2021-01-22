@@ -138,7 +138,7 @@ router.delete("/:id/:task_id", auth, async (req, res) => {
   }
 });
 
-//delete task -> pass list id + task id.
+//update task -> pass list id + task id.
 router.patch("/:id/:task_id", auth, async (req, res) => {
   try {
     const list = await Task.findById(req.params.id);

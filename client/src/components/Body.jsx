@@ -7,8 +7,8 @@ import { v4 as uuid } from "uuid";
 //components
 import List from "./List";
 //functions
-import { handleClicked, editClick } from "../actions/user";
-import { getData } from "../actions/task";
+import { editClick, setcheckData } from "../actions/user";
+import { getData, handleClicked, loadTaskList } from "../actions/task";
 //icons
 import { BiSearchAlt2 } from "react-icons/bi";
 import { MdToday } from "react-icons/md";
@@ -18,7 +18,6 @@ import { IoMdAddCircle } from "react-icons/io";
 import Header from "./header";
 import { getCurrentDate } from "../utils/dateFunction";
 import { SearchResult } from "./SearchResult";
-import Tasks from "./Tasks";
 
 const Loading = styled.div`
   @keyframes lds-dual-ring {
@@ -251,8 +250,6 @@ export class Body extends Component {
       selectedDateNTime: getCurrentDate(),
       isOpen: false,
       search: "",
-      today: 0,
-      scheduled: 0,
     };
   }
   routeChange(path) {
@@ -263,7 +260,7 @@ export class Body extends Component {
     this.props.editClick(this.props.edit);
   }
   displayPage(listId) {
-    this.props.handleClicked(listId);
+    this.props.handleClicked(listId, this.props.taskList);
     this.routeChange(`/displaytask`);
   }
   onChange(e) {
@@ -272,50 +269,10 @@ export class Body extends Component {
     });
   }
 
-  setNumbers() {
-    // Scheduled
-    this.props.taskList.map((l) => {
-      return l.taskList.map((t) => {
-        const dts = new Date(t.date);
-        if (this.state.selectedDateNTime.getFullYear() <= dts.getFullYear()) {
-          if (this.state.selectedDateNTime.getMonth() <= dts.getMonth()) {
-            if (this.state.selectedDateNTime.getDate() < dts.getDate()) {
-              this.setState({});
-              this.setState((state) => ({
-                scheduled: state.scheduled + 1,
-              }));
-            }
-          }
-        }
-      });
-    });
-    //today
-    this.props.taskList.map((l) => {
-      return l.taskList.map((t) => {
-        const dts = new Date(t.date);
-        if (
-          this.state.selectedDateNTime.getDate() === dts.getDate() &&
-          this.state.selectedDateNTime.getMonth() === dts.getMonth() &&
-          this.state.selectedDateNTime.getFullYear() === dts.getFullYear()
-        ) {
-          this.setState((state) => ({
-            today: state.today + 1,
-          }));
-        }
-      });
-    });
-  }
   componentDidMount() {
-    this.props.getData(this.props.token);
-    this.setNumbers();
-  }
-  componentWillReceiveProps(nextProps) {
-    if (this.props.taskList.length !== nextProps.taskList.length) {
-      this.setState({
-        today: 0,
-        scheduled: 0,
-      });
-      this.setNumbers();
+    if (!this.props.checkData) {
+      this.props.getData(this.props.token);
+      this.props.setcheckData();
     }
   }
   render() {
@@ -327,7 +284,7 @@ export class Body extends Component {
             <SearchResult
               key={uuid()}
               open={this.state.isOpen}
-              onClose={() => this.setState({ isOpen: false })}
+              onClose={() => this.setState({ isOpen: false, search: "" })}
               searchText={this.state.search}
               taskData={this.props.taskList}
             />
@@ -355,7 +312,7 @@ export class Body extends Component {
                     <TodayIcon>
                       <MdToday />
                     </TodayIcon>
-                    <Count>{this.state.today}</Count>
+                    <Count>{this.props.today}</Count>
                   </IconCountBlock>
                   <Text>Today</Text>
                 </BoxStyle>
@@ -365,7 +322,7 @@ export class Body extends Component {
                     <ScheduledIcon>
                       <BsCalendar />
                     </ScheduledIcon>
-                    <Count>{this.state.scheduled}</Count>
+                    <Count>{this.props.scheduled}</Count>
                   </IconCountBlock>
                   <Text>Scheduled</Text>
                 </BoxStyle>
@@ -430,10 +387,15 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   taskList: state.task.taskList,
   edit: state.user.editList,
+  checkData: state.user.checkData,
+  scheduled: state.task.scheduled,
+  today: state.task.today,
 });
 
 export default connect(mapStateToProps, {
   handleClicked,
   getData,
   editClick,
+  setcheckData,
+  loadTaskList,
 })(Body);

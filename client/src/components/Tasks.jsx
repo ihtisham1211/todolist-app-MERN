@@ -53,8 +53,6 @@ class Tasks extends Component {
   };
   crossClicked() {
     this.props.deleteTask(this.props.token, this.props.listId, this.props.id);
-    this.props.loadTasks();
-    this.forceUpdate();
   }
   render() {
     return (
@@ -86,7 +84,7 @@ function mapStateToProps(state) {
   return {
     edit: state.user.editTask,
     token: state.auth.token,
-    listId: state.user.clicked,
+    listId: state.task.clickedListId,
   };
 }
 

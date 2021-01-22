@@ -16,13 +16,11 @@ import AddReminderModel from "./components/AddReminderModel";
 import TodayTask from "./components/TodayTask";
 import ScheduledTask from "./components/ScheduledTask";
 
-if (localStorage.token) {
-  setAuthToken(localStorage.token);
-}
-
 function App() {
   useEffect(() => {
-    store.dispatch(loadUser());
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    } else store.dispatch(loadUser());
   }, []);
 
   return (

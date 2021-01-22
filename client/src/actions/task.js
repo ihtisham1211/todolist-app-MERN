@@ -1,6 +1,7 @@
 import axios from "axios";
 import { setAlert } from "./alert";
 import { url } from "../utils/proxy";
+import { getCurrentDate } from "../utils/dateFunction";
 
 //**********************************
 //***********addList
@@ -26,6 +27,11 @@ export const addList = (token, listName) => async (dispatch) => {
 //***********deleteList
 //**********************************
 export const deleteList = (token, listID) => async (dispatch) => {
+  dispatch({
+    type: "REMOVE_LIST",
+    payload: listID,
+  });
+
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -37,7 +43,6 @@ export const deleteList = (token, listID) => async (dispatch) => {
       url + "/api/task/delete_list/" + listID,
       config
     );
-
     dispatch(getData(token));
     dispatch(setAlert("List deleted", "success"));
   } catch (error) {
@@ -61,7 +66,7 @@ export const getData = (token) => async (dispatch) => {
       type: "GET_All_TASKS",
       payload: res.data,
     });
-    console.log("getData");
+    dispatch(getNumbers(res.data));
   } catch (e) {
     dispatch(setAlert("Failed To Get data", "error"));
   }
@@ -76,7 +81,8 @@ export const addTask = (
   date,
   title,
   description,
-
+  checkedId = null,
+  listData = null,
   status = "false"
 ) => async (dispatch) => {
   const config = {
@@ -86,10 +92,15 @@ export const addTask = (
     },
   };
   const body = JSON.stringify({ listId, date, title, description, status });
+
   try {
     const res = await axios.post(url + "/api/task/", body, config);
-    dispatch(getData(token));
-    console.log("addTask");
+    if (checkedId === listId) {
+      dispatch({
+        type: "ADD_TASK",
+        payload: { listId, date, title, description, status },
+      });
+    }
   } catch (error) {
     dispatch(setAlert("Failed To Add Task", "error"));
   }
@@ -99,6 +110,14 @@ export const addTask = (
 //***********deleteTask
 //**********************************
 export const deleteTask = (token, listId, taskId) => async (dispatch) => {
+  dispatch({
+    type: "REMOVE_TASK",
+    payload: {
+      listId,
+      taskId,
+    },
+  });
+
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -111,47 +130,92 @@ export const deleteTask = (token, listId, taskId) => async (dispatch) => {
       url + "/api/task/" + listId + "/" + taskId,
       config
     );
-    dispatch(getData(token));
   } catch (error) {
     dispatch(setAlert("Failed To Delete Task", "error"));
   }
 };
 
 //**********************************
-//***********clearList
+//***********handleClicked
 //**********************************
-export const clearList = (taskList, token) => async (dispatch) => {
-  for (var i = 0; i < taskList.length; i++) {
-    dispatch(deleteTask(token, taskList[i]._id, taskList[i].user));
-  }
-  console.log("clearList");
+export const handleClicked = (ListId, ListData) => async (dispatch) => {
+  dispatch({
+    type: "CLICKED",
+    payload: ListId,
+  });
+  var data;
+  ListData.map((list) => {
+    if (list._id === ListId) {
+      data = {
+        label: list.listName,
+        displayTask: list.taskList,
+      };
+    }
+  });
+  dispatch({
+    type: "LOAD_CLICKED_LIST_TASK",
+    payload: data,
+  });
 };
 //**********************************
-//***********updateTask
+//***********loadTaskList
 //**********************************
-export const updateTask = (
-  token,
-  id,
-  user,
-  title,
-  date,
-  description,
-  status,
-  day,
-  month,
-  year
-) => async (dispatch) => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-      "x-auth-token": token,
-    },
+export const loadTaskList = (ListId, ListData) => async (dispatch) => {
+  var data;
+  ListData.map((list) => {
+    if (list._id === ListId) {
+      data = {
+        label: list.listName,
+        displayTask: list.taskList,
+      };
+    }
+  });
+  dispatch({
+    type: "LOAD_CLICKED_LIST_TASK",
+    payload: data,
+  });
+};
+
+//**********************************
+//***********getNumbers
+//**********************************
+export const getNumbers = (taskList) => async (dispatch) => {
+  var sd = 0;
+  var selectedDateNTime = getCurrentDate();
+  // Scheduled
+  taskList.map((l) => {
+    return l.taskList.map((t) => {
+      const dts = new Date(t.date);
+      if (selectedDateNTime.getFullYear() <= dts.getFullYear()) {
+        if (selectedDateNTime.getMonth() <= dts.getMonth()) {
+          if (selectedDateNTime.getDate() < dts.getDate()) {
+            sd = sd + 1;
+          }
+        }
+      }
+    });
+  });
+  var td = 0;
+  //today
+  taskList.map((l) => {
+    return l.taskList.map((t) => {
+      const dts = new Date(t.date);
+      if (
+        selectedDateNTime.getDate() === dts.getDate() &&
+        selectedDateNTime.getMonth() === dts.getMonth() &&
+        selectedDateNTime.getFullYear() === dts.getFullYear()
+      ) {
+        td = td + 1;
+      }
+    });
+  });
+
+  const payload = {
+    td,
+    sd,
   };
-  const body = JSON.stringify({ title, date, description, status });
-  try {
-    const res = await axios.patch(url + "/api/task/" + id, body, config);
-    console.log("updateTask");
-  } catch (error) {
-    dispatch(setAlert("Failed To Update Task", "error"));
-  }
+  dispatch({
+    type: "SET_NUMBERS",
+    payload,
+  });
 };

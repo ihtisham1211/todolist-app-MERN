@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles } from "@material-ui/core/styles";
 import Menu from "@material-ui/core/Menu";
@@ -17,6 +16,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { editClickDot } from "../actions/user";
 import Header from "./header";
+import { loadTaskList, getData, deleteList } from "../actions/task";
 
 const ButtonDot = withStyles((theme) => ({
   root: {
@@ -174,9 +174,8 @@ export class DisplayTasks extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      label: "",
-      displayTask: [],
       anchor: null,
+      taskHere: this.props.task.displayTask,
     };
   }
 
@@ -185,19 +184,6 @@ export class DisplayTasks extends Component {
   }
   editClicked() {
     this.props.editClickDot(this.props.edit);
-  }
-  loadTasks() {
-    const totalTask = this.props.ListData.map((list) => {
-      if (list._id === this.props.userClicked) {
-        this.setState({
-          label: list.listName,
-          displayTask: list.taskList,
-        });
-      }
-    });
-  }
-  componentDidMount() {
-    this.loadTasks();
   }
 
   render() {
@@ -209,6 +195,8 @@ export class DisplayTasks extends Component {
             <ContainBackList
               onClick={() => {
                 this.routeChange(`/todolist`);
+                this.props.getData(this.props.token);
+                if (this.props.edit) this.props.editClickDot(this.props.edit);
               }}
             >
               <BackBTN>
@@ -245,7 +233,16 @@ export class DisplayTasks extends Component {
                     <EditIcon fontSize="small" />
                   </ListItemIcon>
                 </StyledMenuItemDot>
-                <StyledMenuItemDot>
+                <StyledMenuItemDot
+                  onClick={() => {
+                    this.setState({ anchor: null });
+                    this.props.deleteList(
+                      this.props.token,
+                      this.props.userClicked
+                    );
+                    this.routeChange(`/todolist`);
+                  }}
+                >
                   <ListItemText primary="Delete List " />
                   <ListItemIcon>
                     <DeleteIcon fontSize="small" />
@@ -254,9 +251,9 @@ export class DisplayTasks extends Component {
               </StyledMenuDot>
             </MenuBox>
           </BackTitleContain>
-          <ListName>{this.state.label}</ListName>
+          <ListName>{this.props.task.label}</ListName>
           <TaskList>
-            {this.state.displayTask.map((task) => {
+            {this.props.task.displayTask.map((task) => {
               return (
                 <Tasks
                   key={uuid()}
@@ -265,7 +262,6 @@ export class DisplayTasks extends Component {
                   title={task.title}
                   description={task.description}
                   status={task.status}
-                  loadTasks={this.loadTasks.bind(this)}
                 />
               );
             })}
@@ -289,11 +285,17 @@ export class DisplayTasks extends Component {
 
 function mapStateToProps(state) {
   return {
-    img: state.auth.user.image,
     ListData: state.task.taskList,
-    userClicked: state.user.clicked,
+    userClicked: state.task.clickedListId,
     edit: state.user.editTask,
+    task: state.task.clickedTaskList,
+    token: state.auth.token,
   };
 }
 
-export default connect(mapStateToProps, { editClickDot })(DisplayTasks);
+export default connect(mapStateToProps, {
+  editClickDot,
+  loadTaskList,
+  getData,
+  deleteList,
+})(DisplayTasks);

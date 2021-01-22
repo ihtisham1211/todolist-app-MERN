@@ -120,6 +120,7 @@ class AddReminderModel extends Component {
       description: "",
       list: "",
       listId: "",
+      listName: "",
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -136,8 +137,9 @@ class AddReminderModel extends Component {
   onChangeSelect(e) {
     const listData = e.target.value.split("|");
     this.setState({
-      list: listData[1],
+      list: e.target.value,
       listId: listData[0],
+      listName: listData[1],
     });
   }
   onSubmit(e) {
@@ -148,7 +150,9 @@ class AddReminderModel extends Component {
       listId,
       selectedDateNTime,
       title,
-      description
+      description,
+      this.props.checkedId,
+      this.props.taskList
     );
     this.routeChange();
   }
@@ -190,6 +194,7 @@ class AddReminderModel extends Component {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
+                value={this.state.list}
                 onChange={(e) => this.onChangeSelect(e)}
               >
                 {this.props.taskList.map((list) => {
@@ -240,6 +245,7 @@ function mapStateToProps(state) {
   return {
     taskList: state.task.taskList,
     token: state.auth.token,
+    checkedId: state.task.clickedListId,
   };
 }
 
