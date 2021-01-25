@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import CheckBox from "./CheckBox";
 import { IoCloseSharp } from "react-icons/io5";
-import { deleteTask } from "../actions/task";
+import { BsInfoCircle } from "react-icons/bs";
+import { deleteTask, statusChange, clickedTask } from "../actions/task";
+
 const TaskBody = styled.div`
   margin: 0;
   display: flex;
@@ -29,9 +31,21 @@ const Description = styled.h5`
   font-size: 1.5vh;
   font-weight: lighter;
 `;
+const Info = styled.button`
+  &:hover {
+    color: #e5e5e5;
+  }
+  border: none;
+  border-bottom: 0.5px solid #5f5f5f;
+  background-color: transparent;
+  padding: 0;
+  margin: 0 0 1vh 0;
+  color: #2d62f3;
+  font-size: 2.4vh;
+`;
 const Cross = styled.button`
   &:hover {
-    color: white;
+    color: #e5e5e5;
   }
   border: none;
   border-bottom: 0.5px solid #5f5f5f;
@@ -41,18 +55,43 @@ const Cross = styled.button`
   color: #ff2a2a;
   font-size: 2.4vh;
 `;
+
 class Tasks extends Component {
   constructor(props) {
     super(props);
     this.state = {
       checked: this.props.status === "true" ? true : false,
     };
+    this.routeChange = this.routeChange.bind(this);
+  }
+  routeChange(path) {
+    this.props.history.push(path);
   }
   handleCheckboxChange = (event) => {
     this.setState({ checked: event.target.checked });
+
+    if (this.props.listId.length === 0)
+      this.props.statusChange(this.props.token, this.props.list, this.props.id);
+    else
+      this.props.statusChange(
+        this.props.token,
+        this.props.listId,
+        this.props.id
+      );
   };
   crossClicked() {
     this.props.deleteTask(this.props.token, this.props.listId, this.props.id);
+  }
+  infoClicked() {
+    const infoTask = {
+      taskId: this.props.id,
+      listId: this.props.listId,
+      title: this.props.title,
+      description: this.props.description,
+      date: this.props.date,
+    };
+    this.props.clickedTask(infoTask);
+    this.routeChange(`/edittask`);
   }
   render() {
     return (
@@ -64,10 +103,24 @@ class Tasks extends Component {
           />
         </label>
 
-        <TitleAndDescContain>
-          <Title>{this.props.title}</Title>
-          <Description>{this.props.description}</Description>
-        </TitleAndDescContain>
+        {!this.state.checked ? (
+          <TitleAndDescContain>
+            <Title>{this.props.title}</Title>
+            <Description>{this.props.description}</Description>
+          </TitleAndDescContain>
+        ) : (
+          <TitleAndDescContain>
+            <Title>
+              <del>{this.props.title}</del>
+            </Title>
+            <Description>
+              <del>{this.props.description}</del>
+            </Description>
+          </TitleAndDescContain>
+        )}
+        <Info onClick={() => this.infoClicked()}>
+          <BsInfoCircle />
+        </Info>
         {this.props.edit ? (
           <Cross onClick={() => this.crossClicked()}>
             <IoCloseSharp />
@@ -88,4 +141,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { deleteTask })(Tasks);
+export default connect(mapStateToProps, {
+  deleteTask,
+  statusChange,
+  clickedTask,
+})(Tasks);

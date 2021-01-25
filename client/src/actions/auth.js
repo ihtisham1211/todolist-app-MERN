@@ -22,7 +22,7 @@ export const loadUser = () => async (dispatch) => {
       payload: res.data,
     });
     dispatch({
-      type:"SET_LOADING",
+      type: "SET_LOADING",
     });
   } catch (error) {
     dispatch({
@@ -58,8 +58,11 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
-  localStorage.removeItem('state');
+  localStorage.removeItem("state");
   dispatch({
     type: LOGOUT,
+  });
+  dispatch({
+    type: "CLEAR_ALERTS",
   });
 };

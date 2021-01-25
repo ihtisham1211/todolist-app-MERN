@@ -58,6 +58,9 @@ export class SearchResult extends Component {
                       key={uuid()}
                       listName={l.listName}
                       taskName={t.title}
+                      status={t.status}
+                      list={l._id}
+                      id={t._id}
                     />
                   );
                 }

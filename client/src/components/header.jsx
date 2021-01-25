@@ -38,12 +38,12 @@ const StyledMenuItem = withStyles((theme) => ({
       backgroundColor: "#3c3c3c",
     },
     "& .MuiSvgIcon-fontSizeSmall": {
-      color: "#eee",
+      color: "#e5e5e5",
       margin: "0.2vh 0 0.2vh auto ",
       fontSize: "2.5vh",
     },
     "& .MuiListItemText-primary": {
-      color: "#eee",
+      color: "#e5e5e5",
       margin: "0.2vh 0 0.2vh 0 ",
       fontSize: "2.2vh",
     },

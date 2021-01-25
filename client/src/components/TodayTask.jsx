@@ -69,6 +69,7 @@ const ContainBackList = styled.div`
 const BackBTN = styled.div`
   color: #4271f1;
   margin-top: 0.4vh;
+  margin-right: 0.8vh;
   font-size: 2vh;
 `;
 const ListTitle = styled.h3`
@@ -76,14 +77,14 @@ const ListTitle = styled.h3`
   font-size: 2.2vh;
 `;
 const ListName = styled.h1`
-  margin: 0 0 0 2vh;
+  margin: 0 0 0 1.5vh;
   color: #2d62f3;
   font-size: 4.5vh;
 `;
 const TaskList = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 2vh 0 0 1vh;
+  margin: 2vh 0 0 0.2vh;
   padding: 0.3vh;
   overflow: scroll;
   scrollbar-width: none;
@@ -126,16 +127,41 @@ export class TodayTask extends Component {
                   this.state.TodayDate.getMonth() === dts.getMonth() &&
                   this.state.TodayDate.getFullYear() === dts.getFullYear()
                 ) {
-                  return (
-                    <Tasks
-                      key={uuid()}
-                      id={t._id}
-                      date={t.date}
-                      title={t.title}
-                      description={l.listName}
-                      status={t.status}
-                    />
-                  );
+                  if (t.status === "false")
+                    return (
+                      <Tasks
+                        key={uuid()}
+                        id={t._id}
+                        date={t.date}
+                        title={t.title}
+                        description={l.listName}
+                        status={t.status}
+                        list={l._id}
+                      />
+                    );
+                }
+              });
+            })}
+            {this.props.displayTask.map((l) => {
+              return l.taskList.map((t) => {
+                const dts = new Date(t.date);
+                if (
+                  this.state.TodayDate.getDate() === dts.getDate() &&
+                  this.state.TodayDate.getMonth() === dts.getMonth() &&
+                  this.state.TodayDate.getFullYear() === dts.getFullYear()
+                ) {
+                  if (t.status === "true")
+                    return (
+                      <Tasks
+                        key={uuid()}
+                        id={t._id}
+                        date={t.date}
+                        title={t.title}
+                        description={l.listName}
+                        status={t.status}
+                        list={l._id}
+                      />
+                    );
                 }
               });
             })}

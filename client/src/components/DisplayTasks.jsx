@@ -16,7 +16,12 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { editClickDot } from "../actions/user";
 import Header from "./header";
-import { loadTaskList, getData, deleteList } from "../actions/task";
+import {
+  loadTaskList,
+  getData,
+  deleteList,
+  handleUnClicked,
+} from "../actions/task";
 
 const ButtonDot = withStyles((theme) => ({
   root: {
@@ -55,12 +60,12 @@ const StyledMenuItemDot = withStyles((theme) => ({
       backgroundColor: "#3c3c3c",
     },
     "& .MuiSvgIcon-fontSizeSmall": {
-      color: "#eee",
+      color: "#e5e5e5",
       margin: "0.2vh 0 0.2vh auto ",
       fontSize: "1.8vh",
     },
     "& .MuiListItemText-primary": {
-      color: "#eee",
+      color: "#e5e5e5",
       margin: "0.2vh 0 0.2vh 0 ",
       fontSize: "1.6vh",
     },
@@ -128,7 +133,6 @@ const AddandREM = styled.div`
 const BackTitleContain = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 0.5vh;
   width: 100%;
 `;
 const ContainBackList = styled.div`
@@ -140,6 +144,7 @@ const ContainBackList = styled.div`
 const BackBTN = styled.div`
   color: #4271f1;
   margin-top: 0.4vh;
+  margin-right: 0.8vh;
   font-size: 2vh;
 `;
 const ListTitle = styled.h3`
@@ -147,14 +152,14 @@ const ListTitle = styled.h3`
   font-size: 2.2vh;
 `;
 const ListName = styled.h1`
-  margin: 0 0 0 2vh;
+  margin: 0 0 0 1.5vh;
   color: #2d62f3;
   font-size: 4.5vh;
 `;
 const TaskList = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 2vh 0 0 1vh;
+  margin: 2vh 0 0 0.2vh;
   padding: 0.3vh;
   overflow: scroll;
   scrollbar-width: none;
@@ -195,8 +200,8 @@ export class DisplayTasks extends Component {
             <ContainBackList
               onClick={() => {
                 this.routeChange(`/todolist`);
-                this.props.getData(this.props.token);
                 if (this.props.edit) this.props.editClickDot(this.props.edit);
+                this.props.handleUnClicked();
               }}
             >
               <BackBTN>
@@ -254,16 +259,31 @@ export class DisplayTasks extends Component {
           <ListName>{this.props.task.label}</ListName>
           <TaskList>
             {this.props.task.displayTask.map((task) => {
-              return (
-                <Tasks
-                  key={uuid()}
-                  id={task._id}
-                  date={task.date}
-                  title={task.title}
-                  description={task.description}
-                  status={task.status}
-                />
-              );
+              if (task.status === "false")
+                return (
+                  <Tasks
+                    key={uuid()}
+                    id={task._id}
+                    date={task.date}
+                    title={task.title}
+                    description={task.description}
+                    status={task.status}
+                  />
+                );
+            })}
+
+            {this.props.task.displayTask.map((task) => {
+              if (task.status === "true")
+                return (
+                  <Tasks
+                    key={uuid()}
+                    id={task._id}
+                    date={task.date}
+                    title={task.title}
+                    description={task.description}
+                    status={task.status}
+                  />
+                );
             })}
           </TaskList>
 
@@ -298,4 +318,5 @@ export default connect(mapStateToProps, {
   loadTaskList,
   getData,
   deleteList,
+  handleUnClicked,
 })(DisplayTasks);

@@ -8,7 +8,12 @@ import { v4 as uuid } from "uuid";
 import List from "./List";
 //functions
 import { editClick, setcheckData } from "../actions/user";
-import { getData, handleClicked, loadTaskList } from "../actions/task";
+import {
+  getData,
+  handleClicked,
+  loadTaskList,
+  getNumbers,
+} from "../actions/task";
 //icons
 import { BiSearchAlt2 } from "react-icons/bi";
 import { MdToday } from "react-icons/md";
@@ -90,16 +95,13 @@ const Seachicon = styled.div`
 //***********************************
 const BoxStyle = styled.div`
   @media (max-width: 400px) {
-    width: 36vw;
+    width: 38vw;
     height: 24vw;
-    margin: 0 0.5vh 0 0.5vh;
   }
   &:hover {
     opacity: 0.7;
   }
   cursor: pointer;
-  margin-left: auto;
-  margin-right: auto;
   background-color: #3b3b3b;
   border-radius: 2vh;
   height: 12vh;
@@ -161,7 +163,7 @@ const ContainBox = styled.div`
 
 const MyList = styled.h2`
   color: lightgray;
-  margin-left: 4vh;
+  margin-left: 2vh;
   font-size: 2.5vh;
 `;
 
@@ -172,10 +174,8 @@ const ListConatiner = styled.div`
   &:last-child {
     border: none;
   }
-
   display: flex;
   flex-direction: column;
-  margin: 0 1vh 0 1vh;
   background-color: #3b3b3b;
   border-radius: 2vh;
   padding: 0.5vh;
@@ -238,7 +238,9 @@ const EditBtn = styled.div`
 const EbtnContain = styled.div`
   display: flex;
 `;
-
+const Divider = styled.div`
+  margin: 0 auto 0 auto;
+`;
 //**************************
 //Styles
 //**************************
@@ -274,6 +276,7 @@ export class Body extends Component {
       this.props.getData(this.props.token);
       this.props.setcheckData();
     }
+    this.props.getNumbers(this.props.taskList);
   }
   render() {
     return (
@@ -316,6 +319,7 @@ export class Body extends Component {
                   </IconCountBlock>
                   <Text>Today</Text>
                 </BoxStyle>
+                <Divider />
                 {/*Scheduled*/}
                 <BoxStyle onClick={() => this.routeChange(`/scheduled`)}>
                   <IconCountBlock>
@@ -398,4 +402,5 @@ export default connect(mapStateToProps, {
   editClick,
   setcheckData,
   loadTaskList,
+  getNumbers,
 })(Body);

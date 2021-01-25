@@ -17,7 +17,10 @@ export const addList = (token, listName) => async (dispatch) => {
   try {
     const res = await axios.post(url + "/api/task/add_list", body, config);
 
-    dispatch(getData(token));
+    dispatch({
+      type: "ADD_LIST",
+      payload: res.data,
+    });
     dispatch(setAlert("List added", "success"));
   } catch (error) {
     dispatch(setAlert("Failed To Add List", "error"));
@@ -43,7 +46,6 @@ export const deleteList = (token, listID) => async (dispatch) => {
       url + "/api/task/delete_list/" + listID,
       config
     );
-    dispatch(getData(token));
     dispatch(setAlert("List deleted", "success"));
   } catch (error) {
     dispatch(setAlert("Failed To delete List", "error"));
@@ -95,10 +97,16 @@ export const addTask = (
 
   try {
     const res = await axios.post(url + "/api/task/", body, config);
+
+    dispatch({
+      type: "ADD_TASK",
+      payload: { listId, data: res.data },
+    });
+
     if (checkedId === listId) {
       dispatch({
-        type: "ADD_TASK",
-        payload: { listId, date, title, description, status },
+        type: "UPDATE_CLICKEDTASKLIST",
+        payload: res.data,
       });
     }
   } catch (error) {
@@ -217,5 +225,50 @@ export const getNumbers = (taskList) => async (dispatch) => {
   dispatch({
     type: "SET_NUMBERS",
     payload,
+  });
+};
+//**********************************
+//***********handleClicked
+//**********************************
+export const handleUnClicked = () => async (dispatch) => {
+  dispatch({
+    type: "UNCLICKED",
+  });
+};
+
+//**********************************
+//***********statusChange
+//**********************************
+export const statusChange = (token, listId, taskId) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": token,
+    },
+  };
+
+  try {
+    const res = await axios.patch(
+      url + "/api/task/status/" + listId + "/" + taskId,
+      config
+    );
+    dispatch({
+      type: "STATUS_CHANGE",
+      payload: {
+        listId,
+        data: res.data,
+      },
+    });
+  } catch (error) {
+    dispatch(setAlert("Failed To update Task", "error"));
+  }
+};
+//**********************************
+//***********clickedTask
+//**********************************
+export const clickedTask = (data) => async (dispatch) => {
+  dispatch({
+    type: "CLICKED_TASK",
+    payload: data,
   });
 };

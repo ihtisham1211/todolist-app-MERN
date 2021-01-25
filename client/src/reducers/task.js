@@ -4,12 +4,107 @@ const initialState = {
   scheduled: 0,
   clickedTaskList: "",
   clickedListId: "",
+  clickedTask: "",
 };
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
   //action has the coming data init
   switch (type) {
+    case "CLICKED_TASK":
+      return {
+        ...state,
+        clickedTask: payload,
+      };
+    case "UNCLICKED_TASK":
+      return {
+        ...state,
+        clickedTask: "",
+      };
+    case "STATUS_CHANGE":
+      const statusChangedTasklist = state.taskList.map((list) => {
+        if (list._id === payload.listId) {
+          const newList = {
+            _id: list._id,
+            user: list.user,
+            listName: list.listName,
+            taskList: payload.data,
+          };
+          return newList;
+        }
+        return list;
+      });
+      const newTaskStatusChanged = {
+        label: state.clickedTaskList.label,
+        displayTask: payload.data,
+      };
+      return {
+        ...state,
+        taskList: statusChangedTasklist,
+        clickedTaskList: newTaskStatusChanged,
+      };
+    case "UPDATE_CLICKEDTASKLIST":
+      const newCheckList = {
+        label: state.clickedTaskList.label,
+        displayTask: payload,
+      };
+      return {
+        ...state,
+        clickedTaskList: newCheckList,
+      };
+    case "ADD_TASK":
+      const newData = state.taskList.map((list) => {
+        if (list._id === payload.listId) {
+          const newList = {
+            _id: list._id,
+            user: list.user,
+            listName: list.listName,
+            taskList: payload.data,
+          };
+          return newList;
+        }
+        return list;
+      });
+      return {
+        ...state,
+        taskList: newData,
+      };
+
+    case "REMOVE_TASK":
+      const removedTaskList = state.taskList.map((list) => {
+        if (list._id === payload.listId) {
+          const updatedTasklist = list.taskList.filter(
+            (task) => task._id !== payload.taskId
+          );
+          const tempList = {
+            _id: list._id,
+            user: list.user,
+            listName: list.listName,
+            taskList: updatedTasklist,
+          };
+          return tempList;
+        }
+        return list;
+      });
+
+      if (state.clickedListId === payload.listId) {
+        const updateclickedList = removedTaskList.filter(
+          (list) => list._id === payload.listId
+        );
+        const changeCheckList = {
+          label: updateclickedList[0].listName,
+          displayTask: updateclickedList[0].taskList,
+        };
+        return {
+          ...state,
+          clickedTaskList: changeCheckList,
+          taskList: removedTaskList,
+        };
+      } else
+        return {
+          ...state,
+          taskList: removedTaskList,
+        };
     case "LOAD_CLICKED_LIST_TASK":
       return {
         ...state,
@@ -43,13 +138,7 @@ export default function (state = initialState, action) {
       };
     //ADD to redux LIST
     case "ADD_LIST":
-      let newList = {
-        _id: "",
-        user: "",
-        listName: payload,
-        taskList: [],
-      };
-      let newTaskList = state.taskList.concat(newList);
+      let newTaskList = state.taskList.concat(payload);
       return {
         ...state,
         taskList: newTaskList,
@@ -65,59 +154,6 @@ export default function (state = initialState, action) {
         taskList: deletedTaskList,
       };
 
-    case "ADD_TASK":
-      let newTask = {
-        _id: "",
-        date: payload.date,
-        title: payload.title,
-        description: payload.description,
-        status: payload.status,
-      };
-
-      // const newAddTaskList = state.taskList.map((list) => {
-      //   if (list._id === payload.listId) {
-      //     list.taskList.concat(newTask);
-      //   }
-      //   return list;
-      // });
-
-      const newAddTaskList = state.clickedTaskList.displayTask.concat(newTask);
-      const newTaskList3 = {
-        label: state.clickedTaskList.label,
-        displayTask: newAddTaskList,
-      };
-      return {
-        ...state,
-        clickedTaskList: newTaskList3,
-      };
-
-    case "REMOVE_TASK":
-      // const newDeleteTaskList = state.taskList.map((list) => {
-      //   if (list._id === payload.listId) {
-      //     const i = list.taskList.filter((task) => task._id !== payload.taskId);
-      //
-      //     const cList = {
-      //       _id: list._id,
-      //       user: list.user,
-      //       listName: list.listName,
-      //       taskList: i,
-      //     };
-      //     return cList;
-      //   } else return list;
-      // });
-
-      const newDeleteTaskList2 = state.clickedTaskList.displayTask.filter(
-        (task) => task._id !== payload.taskId
-      );
-      const newTaskList2 = {
-        label: state.clickedTaskList.label,
-        displayTask: newDeleteTaskList2,
-      };
-      return {
-        ...state,
-        // taskList: newDeleteTaskList,
-        clickedTaskList: newTaskList2,
-      };
     default:
       return state;
   }

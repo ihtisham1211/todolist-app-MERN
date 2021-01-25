@@ -15,6 +15,7 @@ import Addlistmodel from "./components/Addlistmodel";
 import AddReminderModel from "./components/AddReminderModel";
 import TodayTask from "./components/TodayTask";
 import ScheduledTask from "./components/ScheduledTask";
+import EditTask from "./components/EditTask";
 
 function App() {
   useEffect(() => {
@@ -36,6 +37,7 @@ function App() {
             <PrivateRoute path="/addrem" component={AddReminderModel} />
             <PrivateRoute path="/today" component={TodayTask} />
             <PrivateRoute path="/scheduled" component={ScheduledTask} />
+                    <PrivateRoute path="/edittask" component={EditTask} />
           </Switch>
         </Router>
       </Provider>

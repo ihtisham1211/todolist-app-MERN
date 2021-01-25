@@ -1,26 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
-import { withStyles } from "@material-ui/core/styles";
-import { getCurrentDate } from "../utils/dateFunction";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
-import { addTask } from "../actions/task";
+import { createMuiTheme, withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import "./editmaterialui.css";
-import Header from "./header";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import { v4 as uuid } from "uuid";
-import Add_task from "./assets/undraw_Add_files_re_v09g.svg";
-import { createMuiTheme } from "@material-ui/core/styles";
+import styled from "styled-components";
 import { ThemeProvider } from "@material-ui/styles";
+import Header from "./header";
+import Add_task from "./assets/undraw_text_field_htlv.svg";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import { v4 as uuid } from "uuid";
+import {
+  KeyboardDatePicker,
+  KeyboardTimePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+
 const theme = createMuiTheme({
   palette: {
     type: "dark",
@@ -102,42 +99,22 @@ const AddTaskImg = styled.img`
   height: 17vh;
   opacity: 0.85;
 `;
-
-class AddReminderModel extends Component {
+class EditTask extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedDateNTime: getCurrentDate(),
+      selectedDateNTime: "",
       title: "",
       description: "",
-      list: `${this.props.taskList[0]._id}|${this.props.taskList[0].listName}`,
-      listId: this.props.taskList[0]._id,
-      listName: this.props.taskList[0].listName,
+      list: "",
+      listId: "",
+      listName: "",
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.routeChange = this.routeChange.bind(this);
   }
 
-  componentDidMount() {
-    if (this.props.checkedId === "") {
-      this.setState({
-        list: `${this.props.taskList[0]._id}|${this.props.taskList[0].listName}`,
-        listId: this.props.taskList[0]._id,
-        listName: this.props.taskList[0].listName,
-      });
-    } else {
-      const index = this.props.taskList.findIndex(
-        (list) => list._id === this.props.checkedId
-      );
-
-      this.setState({
-        list: `${this.props.taskList[index]._id}|${this.props.taskList[index].listName}`,
-        listId: this.props.taskList[index]._id,
-        listName: this.props.taskList[index].listName,
-      });
-    }
-  }
   routeChange() {
     this.props.history.goBack();
   }
@@ -154,18 +131,10 @@ class AddReminderModel extends Component {
       listName: listData[1],
     });
   }
+
   onSubmit(e) {
-    const { selectedDateNTime, title, description, listId } = this.state;
     e.preventDefault();
-    this.props.addTask(
-      this.props.token,
-      listId,
-      selectedDateNTime,
-      title,
-      description,
-      this.props.checkedId,
-      this.props.taskList
-    );
+
     this.routeChange();
   }
   render() {
@@ -175,7 +144,7 @@ class AddReminderModel extends Component {
         <Body>
           <TitleBar>
             <CancelBtn onClick={() => this.routeChange()}>Cancel</CancelBtn>
-            <TitleRem>New Reminder</TitleRem>
+            <TitleRem>Edit Task</TitleRem>
             <AddBtn
               onClick={(e) => this.onSubmit(e)}
               disabled={!this.state.title}
@@ -264,4 +233,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { addTask })(AddReminderModel);
+export default connect(mapStateToProps)(EditTask);

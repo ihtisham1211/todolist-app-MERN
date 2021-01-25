@@ -32,7 +32,7 @@ const ContainBtn = styled.div`
 const AddRem = styled.div`
   border: none;
   background-color: transparent;
-  color: #2d62f3;
+  color: #cf2727;
   font-size: 1.5vh;
   margin-left: 0.5vh;
 `;
@@ -42,7 +42,7 @@ const RemIcon = styled.div`
   font-size: 2vh;
   border-radius: 4vh;
   margin: 0;
-  color: #2d62f3;
+  color: #cf2727;
 `;
 
 const AddandREM = styled.div`
@@ -66,9 +66,11 @@ const ContainBackList = styled.div`
   margin: auto auto 0 0.5vh;
   align-items: center;
 `;
+
 const BackBTN = styled.div`
   color: #cf2727;
   margin-top: 0.4vh;
+  margin-right: 0.8vh;
   font-size: 2vh;
 `;
 const ListTitle = styled.h3`
@@ -76,19 +78,18 @@ const ListTitle = styled.h3`
   font-size: 2.2vh;
 `;
 const ListName = styled.h1`
-  margin: 0 0 0 2vh;
+  margin: 0 0 0 1.5vh;
   color: #cf2727;
   font-size: 4.5vh;
 `;
 const TaskList = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 2vh 0 0 1vh;
+  margin: 2vh 0 0 0.2vh;
   padding: 0.3vh;
   overflow: scroll;
   scrollbar-width: none;
 `;
-
 export class ScheduledTask extends Component {
   constructor(props) {
     super(props);

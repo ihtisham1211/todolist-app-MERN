@@ -110,7 +110,9 @@ router.post(
         { _id: req.body.listId },
         { $push: { taskList: newTask } }
       );
-      res.json(task);
+
+      const updatedTaskList = await Task.findById(req.body.listId);
+      res.json(updatedTaskList.taskList);
     } catch (error) {
       console.error(error.message);
       res.status(500).send("unable to add task");
@@ -139,7 +141,7 @@ router.delete("/:id/:task_id", auth, async (req, res) => {
 });
 
 //update task -> pass list id + task id.
-router.patch("/:id/:task_id", auth, async (req, res) => {
+router.patch("/update_list/:id/:task_id", auth, async (req, res) => {
   try {
     const list = await Task.findById(req.params.id);
     const index = list.taskList.findIndex(
@@ -156,6 +158,39 @@ router.patch("/:id/:task_id", auth, async (req, res) => {
     };
     list.taskList = list.taskList.filter(({ id }) => id !== req.params.task_id);
     list.taskList.splice(index, 0, updateTask);
+    await list.save();
+    return res.json(list.taskList);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("unable to update task");
+  }
+});
+
+
+
+//update task status -> pass list id + task id.
+router.patch("/status/:id/:task_id", auth, async (req, res) => {
+  try {
+    const list = await Task.findById(req.params.id);
+    const index = list.taskList.findIndex(
+      (task) => task._id == req.params.task_id
+    );
+    if (index === -1) {
+      return res.status(404).json({ msg: "task does not exist" });
+    }
+    var st;
+    if (list.taskList[index].status === "true") st = "false";
+    else st = "true";
+
+    const updateTask = {
+      date: list.taskList[index].date,
+      title: list.taskList[index].title,
+      description: list.taskList[index].description,
+      status: st,
+    };
+    list.taskList = list.taskList.filter(({ id }) => id !== req.params.task_id);
+    list.taskList.splice(index, 0, updateTask);
+
     await list.save();
     return res.json(list.taskList);
   } catch (error) {
