@@ -111,7 +111,7 @@ class EditTask extends Component {
       selectedDateNTime: "",
       title: "",
       description: "",
-      list: "",
+      list: "600fbf9f4009e300243eb737|Killers",
       listId: "",
       listName: "",
     };
@@ -151,6 +151,7 @@ class EditTask extends Component {
         listId: this.props.taskData.listId,
         listName: listData[0].listName,
       });
+      console.log(`${this.props.taskData.listId}|${listData[0].listName}`);
     }
   }
 
@@ -165,7 +166,7 @@ class EditTask extends Component {
       this.state.description,
       this.props.taskData.status
     );
-    this.routeChange(`todolist`);
+    this.routeChange(`/todolist`);
     this.props.unClickedTask();
   }
   render() {
@@ -209,15 +210,9 @@ class EditTask extends Component {
             />
 
             <FormControl>
-              <InputLabel
-                shrink
-                id="demo-simple-select-placeholder-label-label"
-              >
-                List
-              </InputLabel>
+              <InputLabel shrink>List</InputLabel>
               <Select
-                displayEmpty
-                value={this.state.list}
+                value={this.state.list ? this.state.list : " "}
                 onChange={(e) => this.onChangeSelect(e)}
               >
                 {this.props.taskList.map((list, index) => {

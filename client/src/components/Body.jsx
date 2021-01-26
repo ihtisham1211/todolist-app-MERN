@@ -24,6 +24,7 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import { MdToday } from "react-icons/md";
 import { BsCalendar } from "react-icons/bs";
 import { IoMdAddCircle } from "react-icons/io";
+import AlertM from "./routering/Alert";
 
 const Loading = styled.div`
   @keyframes lds-dual-ring {
@@ -60,6 +61,7 @@ const BodyStyle = styled.div`
   height: 77vh;
   background: #111;
   margin: 5vh auto;
+  margin-bottom: 0;
   border-radius: 1vh;
   padding: 1.5vh;
 `;
@@ -384,6 +386,7 @@ export class Body extends Component {
                 </AddList>
               </ContainBtn>
             </BodyStyle>
+            <AlertM/>
           </div>
         ) : (
           <Loading />

@@ -21,7 +21,6 @@ import { v4 as uuid } from "uuid";
 import Add_task from "./assets/undraw_Add_files_re_v09g.svg";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
-import { Grid } from "@material-ui/core";
 
 const theme = createMuiTheme({
   palette: {
@@ -117,9 +116,14 @@ class AddReminderModel extends Component {
       selectedDateNTime: getCurrentDate(),
       title: "",
       description: "",
-      list: `${this.props.taskList[0]._id}|${this.props.taskList[0].listName}`,
-      listId: this.props.taskList[0]._id,
-      listName: this.props.taskList[0].listName,
+      list:
+        this.props.taskList.length === 0
+          ? ""
+          : `${this.props.taskList[0]._id}|${this.props.taskList[0].listName}`,
+      listId:
+        this.props.taskList.length === 0 ? "" : this.props.taskList[0]._id,
+      listName:
+        this.props.taskList.length === 0 ? "" : this.props.taskList[0].listName,
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -127,22 +131,24 @@ class AddReminderModel extends Component {
   }
 
   componentDidMount() {
-    if (this.props.checkedId === "") {
+    if (this.props.checkedId === "" && this.props.taskList.length !== 0) {
       this.setState({
         list: `${this.props.taskList[0]._id}|${this.props.taskList[0].listName}`,
         listId: this.props.taskList[0]._id,
         listName: this.props.taskList[0].listName,
       });
     } else {
-      const index = this.props.taskList.findIndex(
-        (list) => list._id === this.props.checkedId
-      );
+      if (this.props.taskList.length !== 0) {
+        const index = this.props.taskList.findIndex(
+          (list) => list._id === this.props.checkedId
+        );
 
-      this.setState({
-        list: `${this.props.taskList[index]._id}|${this.props.taskList[index].listName}`,
-        listId: this.props.taskList[index]._id,
-        listName: this.props.taskList[index].listName,
-      });
+        this.setState({
+          list: `${this.props.taskList[index]._id}|${this.props.taskList[index].listName}`,
+          listId: this.props.taskList[index]._id,
+          listName: this.props.taskList[index].listName,
+        });
+      }
     }
   }
   routeChange() {
@@ -185,7 +191,7 @@ class AddReminderModel extends Component {
             <TitleRem>New Reminder</TitleRem>
             <AddBtn
               onClick={(e) => this.onSubmit(e)}
-              disabled={!this.state.title}
+              disabled={!this.state.title || this.state.list === ""}
             >
               Add
             </AddBtn>
@@ -210,25 +216,26 @@ class AddReminderModel extends Component {
             />
 
             <FormControl>
-              <InputLabel
-                shrink
-                id="demo-simple-select-placeholder-label-label"
-              >
-                List
-              </InputLabel>
+              <InputLabel shrink>List</InputLabel>
               <Select
                 displayEmpty
                 value={this.state.list}
                 onChange={(e) => this.onChangeSelect(e)}
               >
-                {this.props.taskList.map((list, index) => {
-                  var setVal = list._id + "|" + list.listName;
-                  return (
-                    <MenuItem key={uuid()} value={setVal}>
-                      {list.listName}
-                    </MenuItem>
-                  );
-                })}
+                {this.props.taskList.length !== 0 ? (
+                  this.props.taskList.map((list, index) => {
+                    var setVal = list._id + "|" + list.listName;
+                    return (
+                      <MenuItem key={uuid()} value={setVal}>
+                        {list.listName}
+                      </MenuItem>
+                    );
+                  })
+                ) : (
+                  <MenuItem key={uuid()} value={""}>
+                    ⚠️ ⚠️ ⚠️  - No list found, kindly add a list
+                  </MenuItem>
+                )}
               </Select>
             </FormControl>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>

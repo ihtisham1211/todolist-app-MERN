@@ -109,6 +109,7 @@ export const addTask = (
         payload: res.data,
       });
     }
+        dispatch(setAlert("Task added", "success"));
   } catch (error) {
     dispatch(setAlert("Failed To Add Task", "error"));
   }

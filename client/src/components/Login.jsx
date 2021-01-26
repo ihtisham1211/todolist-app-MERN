@@ -7,6 +7,7 @@ import { Redirect } from "react-router";
 import login_img from "./assets/undraw_secure_login_pdn4.png";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
+import AlertM from "./routering/Alert";
 
 const Loading = styled.div`
   @keyframes lds-dual-ring {
@@ -169,7 +170,7 @@ export class Login extends Component {
                 </ColorButton>
               </BtnContainer>
 
-              <Alert />
+              <AlertM />
             </LoginForm>
           ) : (
             <Loading />
