@@ -1,13 +1,12 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import { addList } from "../actions/task";
-import AlertM from "./routering/Alert";
 import TextField from "@material-ui/core/TextField";
 import "./editmaterialui.css";
 import Header from "./header";
+import Add_task from "./assets/undraw_to_do_xvvc.svg";
 
 const TextFieldEdit = withStyles((theme) => ({
   root: {
@@ -94,6 +93,12 @@ const AddBtn = styled.button`
   color: #2d62f3;
   font-size: 1.8vh;
 `;
+const AddTaskImg = styled.img`
+  align-self: center;
+  margin: 3vh 0 2vh 0;
+  height: 17vh;
+  opacity: 0.85;
+`;
 
 export class Addlistmodel extends Component {
   constructor(props) {
@@ -133,6 +138,7 @@ export class Addlistmodel extends Component {
               Done
             </AddBtn>
           </TitleBar>
+          <AddTaskImg alt="add_task_img" src={Add_task} />
           <FormBody>
             <TextFieldEdit
               name="listName"

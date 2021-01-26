@@ -21,6 +21,8 @@ import { v4 as uuid } from "uuid";
 import Add_task from "./assets/undraw_Add_files_re_v09g.svg";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
+import { Grid } from "@material-ui/core";
+
 const theme = createMuiTheme({
   palette: {
     type: "dark",
@@ -55,6 +57,11 @@ const Body = styled.div`
   padding: 1.5vh;
 `;
 const FormBody = styled.form`
+  @media (max-height: 600px) {
+    overflow: scroll;
+    scrollbar-width: none;
+  }
+
   display: flex;
   flex-direction: column;
   padding: 1.5vh;
@@ -191,6 +198,7 @@ class AddReminderModel extends Component {
               value={this.state.title}
               placeholder={"Enter Title"}
               onChange={(e) => this.onChange(e)}
+              margin="normal"
               required
             />
             <TextFieldEdit

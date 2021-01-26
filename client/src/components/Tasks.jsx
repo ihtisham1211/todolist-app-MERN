@@ -5,6 +5,7 @@ import CheckBox from "./CheckBox";
 import { IoCloseSharp } from "react-icons/io5";
 import { BsInfoCircle } from "react-icons/bs";
 import { deleteTask, statusChange, clickedTask } from "../actions/task";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const TaskBody = styled.div`
   margin: 0;
@@ -38,7 +39,7 @@ const Info = styled.button`
   border: none;
   border-bottom: 0.5px solid #5f5f5f;
   background-color: transparent;
-  padding: 0;
+  padding: 0 0.5 0 0;
   margin: 0 0 1vh 0;
   color: #2d62f3;
   font-size: 2.4vh;
@@ -65,7 +66,7 @@ class Tasks extends Component {
     this.routeChange = this.routeChange.bind(this);
   }
   routeChange(path) {
-    this.props.history.push(path);
+    this.props.history.push(`/edittask`);
   }
   handleCheckboxChange = (event) => {
     this.setState({ checked: event.target.checked });
@@ -89,9 +90,10 @@ class Tasks extends Component {
       title: this.props.title,
       description: this.props.description,
       date: this.props.date,
+      status: this.props.status,
     };
     this.props.clickedTask(infoTask);
-    this.routeChange(`/edittask`);
+    this.routeChange();
   }
   render() {
     return (

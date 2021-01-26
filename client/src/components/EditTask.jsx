@@ -17,6 +17,7 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import { unClickedTask, updateTask } from "../actions/task";
 
 const theme = createMuiTheme({
   palette: {
@@ -52,6 +53,10 @@ const Body = styled.div`
   padding: 1.5vh;
 `;
 const FormBody = styled.form`
+  @media (max-height: 600px) {
+    overflow: scroll;
+    scrollbar-width: none;
+  }
   display: flex;
   flex-direction: column;
   padding: 1.5vh;
@@ -132,10 +137,35 @@ class EditTask extends Component {
     });
   }
 
+  componentDidMount() {
+    if (this.props.taskData.length !== 0) {
+      const listData = this.props.taskList.filter(
+        (l) => this.props.taskData.listId === l._id
+      );
+      this.setState({
+        selectedDateNTime: this.props.taskData.date,
+        title: this.props.taskData.title,
+        description: this.props.taskData.description,
+        list: `${this.props.taskData.listId}|${listData[0].listName}`,
+        listId: this.props.taskData.listId,
+        listName: listData[0].listName,
+      });
+    }
+  }
+
   onSubmit(e) {
     e.preventDefault();
-
+    this.props.updateTask(
+      this.props.token,
+      this.state.listId,
+      this.props.taskData.taskId,
+      this.state.selectedDateNTime,
+      this.state.title,
+      this.state.description,
+      this.props.taskData.status
+    );
     this.routeChange();
+    this.props.unClickedTask();
   }
   render() {
     return (
@@ -143,13 +173,20 @@ class EditTask extends Component {
         <Header />
         <Body>
           <TitleBar>
-            <CancelBtn onClick={() => this.routeChange()}>Cancel</CancelBtn>
+            <CancelBtn
+              onClick={() => {
+                this.props.unClickedTask();
+                this.routeChange();
+              }}
+            >
+              Cancel
+            </CancelBtn>
             <TitleRem>Edit Task</TitleRem>
             <AddBtn
               onClick={(e) => this.onSubmit(e)}
               disabled={!this.state.title}
             >
-              Add
+              Update
             </AddBtn>
           </TitleBar>
           <AddTaskImg alt="add_task_img" src={Add_task} />
@@ -230,7 +267,10 @@ function mapStateToProps(state) {
     taskList: state.task.taskList,
     token: state.auth.token,
     checkedId: state.task.clickedListId,
+    taskData: state.task.clickedTask,
   };
 }
 
-export default connect(mapStateToProps)(EditTask);
+export default connect(mapStateToProps, { unClickedTask, updateTask })(
+  EditTask
+);

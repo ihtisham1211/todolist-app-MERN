@@ -109,6 +109,7 @@ export const addTask = (
         payload: res.data,
       });
     }
+
   } catch (error) {
     dispatch(setAlert("Failed To Add Task", "error"));
   }
@@ -271,4 +272,51 @@ export const clickedTask = (data) => async (dispatch) => {
     type: "CLICKED_TASK",
     payload: data,
   });
+};
+//**********************************
+//***********unClickedTask
+//**********************************
+export const unClickedTask = () => async (dispatch) => {
+  dispatch({
+    type: "UNCLICKED_TASK",
+  });
+};
+
+//**********************************
+//***********unClickedTask
+//**********************************
+export const updateTask = (
+  token,
+  listId,
+  taskId,
+  date,
+  title,
+  description,
+  status
+) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": token,
+    },
+  };
+
+  const body = JSON.stringify({ date, title, description, status });
+  try {
+    const res = await axios.patch(
+      url + "/api/task/update_list/" + listId + "/" + taskId,
+      body,
+      config
+    );
+    console.log(res.data);
+    dispatch({
+      type: "UPDATE_TASK",
+      payload: {
+        listId,
+        data: res.data,
+      },
+    });
+  } catch (error) {
+    dispatch(setAlert("Failed To update Task", "error"));
+  }
 };

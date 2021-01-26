@@ -37,7 +37,7 @@ function App() {
             <PrivateRoute path="/addrem" component={AddReminderModel} />
             <PrivateRoute path="/today" component={TodayTask} />
             <PrivateRoute path="/scheduled" component={ScheduledTask} />
-                    <PrivateRoute path="/edittask" component={EditTask} />
+            <PrivateRoute path="/edittask" component={EditTask} />
           </Switch>
         </Router>
       </Provider>

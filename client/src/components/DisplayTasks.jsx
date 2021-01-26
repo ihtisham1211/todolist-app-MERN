@@ -268,6 +268,7 @@ export class DisplayTasks extends Component {
                     title={task.title}
                     description={task.description}
                     status={task.status}
+                    history={this.props.history}
                   />
                 );
             })}
@@ -282,6 +283,7 @@ export class DisplayTasks extends Component {
                     title={task.title}
                     description={task.description}
                     status={task.status}
+                    history={this.props.history}
                   />
                 );
             })}

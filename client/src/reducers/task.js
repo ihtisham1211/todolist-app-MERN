@@ -21,6 +21,7 @@ export default function (state = initialState, action) {
         ...state,
         clickedTask: "",
       };
+    case "UPDATE_TASK":
     case "STATUS_CHANGE":
       const statusChangedTasklist = state.taskList.map((list) => {
         if (list._id === payload.listId) {

@@ -6,6 +6,8 @@ import "date-fns";
 import { v4 as uuid } from "uuid";
 //components
 import List from "./List";
+import Header from "./header";
+import { SearchResult } from "./SearchResult";
 //functions
 import { editClick, setcheckData } from "../actions/user";
 import {
@@ -14,15 +16,14 @@ import {
   loadTaskList,
   getNumbers,
 } from "../actions/task";
+
+import { getCurrentDate } from "../utils/dateFunction";
+
 //icons
 import { BiSearchAlt2 } from "react-icons/bi";
 import { MdToday } from "react-icons/md";
 import { BsCalendar } from "react-icons/bs";
 import { IoMdAddCircle } from "react-icons/io";
-
-import Header from "./header";
-import { getCurrentDate } from "../utils/dateFunction";
-import { SearchResult } from "./SearchResult";
 
 const Loading = styled.div`
   @keyframes lds-dual-ring {
@@ -275,9 +276,16 @@ export class Body extends Component {
     if (!this.props.checkData) {
       this.props.getData(this.props.token);
       this.props.setcheckData();
-    }
-    this.props.getNumbers(this.props.taskList);
+    } else this.props.getNumbers(this.props.taskList);
   }
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      JSON.stringify(prevProps.taskList) !== JSON.stringify(this.props.taskList)
+    ) {
+      this.props.getNumbers(this.props.taskList);
+    }
+  }
+
   render() {
     return (
       <>
