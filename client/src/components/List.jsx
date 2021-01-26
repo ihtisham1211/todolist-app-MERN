@@ -67,7 +67,7 @@ class List extends Component {
   render() {
     return (
       <ListBody>
-        <ListIcon>
+        <ListIcon onClick={(e) => this.props.displayPage(this.props.id)}>
           <BsListUl />
         </ListIcon>
         <ContainTNA>
@@ -75,7 +75,7 @@ class List extends Component {
             {this.props.name}
           </Text>
           <Number>{this.props.task}</Number>
-          <Arrow>
+          <Arrow onClick={(e) => this.props.displayPage(this.props.id)}>
             <FaGreaterThan />
           </Arrow>
           {this.props.edit ? (

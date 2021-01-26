@@ -227,17 +227,22 @@ export class DisplayTasks extends Component {
                 open={Boolean(this.state.anchor)}
                 onClose={() => this.setState({ anchor: null })}
               >
-                <StyledMenuItemDot
-                  onClick={() => {
-                    this.editClicked();
-                    this.setState({ anchor: null });
-                  }}
-                >
-                  <ListItemText primary="Edit " />
-                  <ListItemIcon>
-                    <EditIcon fontSize="small" />
-                  </ListItemIcon>
-                </StyledMenuItemDot>
+                {this.props.task.displayTask.length !== 0 ? (
+                  <StyledMenuItemDot
+                    onClick={() => {
+                      this.editClicked();
+                      this.setState({ anchor: null });
+                    }}
+                  >
+                    <ListItemText primary="Edit " />
+                    <ListItemIcon>
+                      <EditIcon fontSize="small" />
+                    </ListItemIcon>
+                  </StyledMenuItemDot>
+                ) : (
+                  <div />
+                )}
+
                 <StyledMenuItemDot
                   onClick={() => {
                     this.setState({ anchor: null });

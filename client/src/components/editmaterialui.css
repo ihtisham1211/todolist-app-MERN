@@ -20,3 +20,6 @@
 .MuiInput-underline::before {
   border-bottom: 1px solid grey;
 }
+.MuiFormControl-root {
+  margin: 2vh 0 1vh 0;
+}

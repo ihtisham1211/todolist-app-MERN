@@ -3,10 +3,30 @@ import styled from "styled-components";
 import CheckBox from "./CheckBox";
 import { connect } from "react-redux";
 import { statusChange } from "../actions/task";
+import { BsInfoCircle } from "react-icons/bs";
+import { v4 as uuid } from "uuid";
+import { clickedTask } from "../actions/task";
+
+const Full = styled.div`
+  display: flex;
+`;
 const ContainText = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 0 1.5vh 1vh;
+  flex-grow: 1;
+`;
+const Info = styled.button`
+  &:hover {
+    color: #e5e5e5;
+  }
+
+  border: none;
+  background-color: transparent;
+  align-self: flex-start;
+  color: #2d62f3;
+  font-size: 2vh;
+  margin-top: 0.4vh;
 `;
 const ListNameText = styled.h1`
   color: #2d62f3;
@@ -23,6 +43,7 @@ const TaskNameText = styled.h2`
 const CandLn = styled.div`
   display: flex;
 `;
+
 class SearchItem extends Component {
   constructor(props) {
     super(props);
@@ -42,10 +63,25 @@ class SearchItem extends Component {
         this.props.id
       );
   };
+  routeChange(path) {
+    this.props.history.push(`/edittask`);
+  }
+  infoClicked() {
+    const infoTask = {
+      taskId: this.props.taskId,
+      listId: this.props.list,
+      title: this.props.taskName,
+      description: this.props.description,
+      date: this.props.date,
+      status: this.props.status,
+    };
+    this.props.clickedTask(infoTask);
+    this.routeChange();
+  }
+
   render() {
     return (
-      <div>
-        {" "}
+      <Full key={uuid()}>
         {!this.state.checked ? (
           <ContainText>
             <CandLn>
@@ -79,7 +115,10 @@ class SearchItem extends Component {
             </TaskNameText>
           </ContainText>
         )}
-      </div>
+        <Info onClick={() => this.infoClicked()}>
+          <BsInfoCircle />
+        </Info>
+      </Full>
     );
   }
 }
@@ -90,4 +129,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { statusChange })(SearchItem);
+export default connect(mapStateToProps, { statusChange, clickedTask })(
+  SearchItem
+);

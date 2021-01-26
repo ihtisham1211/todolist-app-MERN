@@ -10,7 +10,7 @@ const Overlay = styled.div`
   bottom: 0;
   right: 0;
   left: 0;
-  background-color: none;
+  background-color: transparent;
   z-index: 100;
 `;
 const Body = styled.div`
@@ -60,7 +60,10 @@ export class SearchResult extends Component {
                       taskName={t.title}
                       status={t.status}
                       list={l._id}
-                      id={t._id}
+                      taskId={t._id}
+                      description={t.description}
+                      date={t.date}
+                      history={this.props.history}
                     />
                   );
                 }

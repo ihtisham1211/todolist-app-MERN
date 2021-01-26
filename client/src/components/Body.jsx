@@ -301,6 +301,7 @@ export class Body extends Component {
               onClose={() => this.setState({ isOpen: false, search: "" })}
               searchText={this.state.search}
               taskData={this.props.taskList}
+              history={this.props.history}
             />
             <BodyStyle>
               {/*SearchBar*/}
@@ -344,12 +345,11 @@ export class Body extends Component {
               </ContainBox>
               <EbtnContain>
                 <MyList>My Lists</MyList>
-                <EditBtn
-                  editColor={this.props.edit}
-                  onClick={() => this.editClicked()}
-                >
-                  Edit
-                </EditBtn>
+                {this.props.taskList.length !== 0 ? (
+                  <EditBtn onClick={() => this.editClicked()}>Edit</EditBtn>
+                ) : (
+                  <div />
+                )}
               </EbtnContain>
 
               {this.props.taskList.length === 0 ? (
@@ -386,7 +386,7 @@ export class Body extends Component {
                 </AddList>
               </ContainBtn>
             </BodyStyle>
-            <AlertM/>
+            <AlertM />
           </div>
         ) : (
           <Loading />

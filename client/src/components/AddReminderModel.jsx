@@ -30,15 +30,21 @@ const theme = createMuiTheme({
 
 const TextFieldEdit = withStyles((theme) => ({
   root: {
-    margin: "1vh 0 1vh 0",
+    margin: "2vh 0 1vh 0",
     "& .MuiTextField-root": {
-      margin: theme.spacing(1),
       width: "25ch",
-      fontSize: "2vh",
-      font: "2vh",
     },
   },
 }))(TextField);
+
+const MyFormControl = withStyles((theme) => ({
+  root: {
+    margin: "2vh 0 1vh 0",
+    "& .MuiTextField-root": {
+      width: "25ch",
+    },
+  },
+}))(FormControl);
 
 const Body = styled.div`
   @media (max-width: 400px) {
@@ -215,7 +221,7 @@ class AddReminderModel extends Component {
               onChange={(e) => this.onChange(e)}
             />
 
-            <FormControl>
+            <MyFormControl>
               <InputLabel shrink>List</InputLabel>
               <Select
                 displayEmpty
@@ -233,11 +239,11 @@ class AddReminderModel extends Component {
                   })
                 ) : (
                   <MenuItem key={uuid()} value={""}>
-                    ⚠️ ⚠️ ⚠️  - No list found, kindly add a list
+                    ⚠️ ⚠️ ⚠️ - No list found, kindly add a list
                   </MenuItem>
                 )}
               </Select>
-            </FormControl>
+            </MyFormControl>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
                 disableToolbar
