@@ -128,9 +128,10 @@ export default function (state = initialState, action) {
         scheduled: payload.sd,
       };
     case "GET_All_TASKS":
+      const newDataTaskList = payload.slice();
       return {
         ...state,
-        taskList: payload,
+        taskList: newDataTaskList,
       };
     case "CLEAR_TASK":
       return {

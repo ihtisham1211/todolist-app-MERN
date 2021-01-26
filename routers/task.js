@@ -148,25 +148,59 @@ router.patch("/update_list/:id/:task_id", auth, async (req, res) => {
       (task) => task._id == req.params.task_id
     );
     if (index === -1) {
-      return res.status(404).json({ msg: "task does not exist" });
+      // return res.status(404).json({ msg: "task does not exist" });
+
+      const updateTask = {
+        user: list.user,
+        date: req.body.date,
+        title: req.body.title,
+        description: req.body.description,
+        status: req.body.status,
+      };
+
+      //list where we have to remove task from.
+      const allList = await Task.find({ user: list.user });
+      var taskList_ID;
+      allList.map((l) => {
+        l.taskList.map((t) => {
+          if (t._id == req.params.task_id) {
+            taskList_ID = l._id;
+          }
+        });
+      });
+
+      const listTaskDelete = await Task.findById(taskList_ID);
+      listTaskDelete.taskList = listTaskDelete.taskList.filter(
+        ({ id }) => id !== req.params.task_id
+      );
+
+      await Task.updateOne(
+        { _id: req.params.id },
+        { $push: { taskList: updateTask } }
+      );
+      await listTaskDelete.save();
+      const retList = await Task.find({ user: list.user });
+      return res.json(retList);
+    } else {
+      const updateTask = {
+        date: req.body.date,
+        title: req.body.title,
+        description: req.body.description,
+        status: req.body.status,
+      };
+      list.taskList = list.taskList.filter(
+        ({ id }) => id !== req.params.task_id
+      );
+
+      list.taskList.splice(index, 0, updateTask);
+      await list.save();
+      return res.json(list.taskList);
     }
-    const updateTask = {
-      date: req.body.date,
-      title: req.body.title,
-      description: req.body.description,
-      status: req.body.status,
-    };
-    list.taskList = list.taskList.filter(({ id }) => id !== req.params.task_id);
-    list.taskList.splice(index, 0, updateTask);
-    await list.save();
-    return res.json(list.taskList);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("unable to update task");
   }
 });
-
-
 
 //update task status -> pass list id + task id.
 router.patch("/status/:id/:task_id", auth, async (req, res) => {

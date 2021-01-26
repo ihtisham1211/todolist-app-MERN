@@ -47,7 +47,6 @@ export const updateUser = (id, token, name, email, password, image) => async (
 
   try {
     const res = await axios.patch(url + "/api/user/" + id, body, config);
-    console.log("updateUser");
     dispatch(setAlert("User Updated", "success"));
   } catch (error) {
     dispatch(setAlert("Failed To Updated", "error"));

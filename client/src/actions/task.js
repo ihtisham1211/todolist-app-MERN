@@ -109,7 +109,6 @@ export const addTask = (
         payload: res.data,
       });
     }
-
   } catch (error) {
     dispatch(setAlert("Failed To Add Task", "error"));
   }
@@ -308,14 +307,23 @@ export const updateTask = (
       body,
       config
     );
-    console.log(res.data);
-    dispatch({
-      type: "UPDATE_TASK",
-      payload: {
-        listId,
-        data: res.data,
-      },
-    });
+
+    if (res.data[0].listName) {
+      dispatch({
+        type: "GET_All_TASKS",
+        payload: res.data,
+      });
+      dispatch(getNumbers(res.data));
+
+    } else {
+      dispatch({
+        type: "UPDATE_TASK",
+        payload: {
+          listId,
+          data: res.data,
+        },
+      });
+    }
   } catch (error) {
     dispatch(setAlert("Failed To update Task", "error"));
   }

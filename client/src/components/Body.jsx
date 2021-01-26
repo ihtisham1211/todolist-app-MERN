@@ -276,8 +276,9 @@ export class Body extends Component {
     if (!this.props.checkData) {
       this.props.getData(this.props.token);
       this.props.setcheckData();
-    } else this.props.getNumbers(this.props.taskList);
+    }
   }
+
   componentDidUpdate(prevProps, prevState) {
     if (
       JSON.stringify(prevProps.taskList) !== JSON.stringify(this.props.taskList)

@@ -17,7 +17,7 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { unClickedTask, updateTask } from "../actions/task";
+import { getData, unClickedTask, updateTask } from "../actions/task";
 
 const theme = createMuiTheme({
   palette: {
@@ -120,8 +120,9 @@ class EditTask extends Component {
     this.routeChange = this.routeChange.bind(this);
   }
 
-  routeChange() {
-    this.props.history.goBack();
+  routeChange(path) {
+    if (path) this.props.history.push(path);
+    else this.props.history.goBack();
   }
   onChange(e) {
     this.setState({
@@ -164,7 +165,7 @@ class EditTask extends Component {
       this.state.description,
       this.props.taskData.status
     );
-    this.routeChange();
+    this.routeChange(`todolist`);
     this.props.unClickedTask();
   }
   render() {
@@ -271,6 +272,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { unClickedTask, updateTask })(
+export default connect(mapStateToProps, { unClickedTask, getData, updateTask })(
   EditTask
 );
