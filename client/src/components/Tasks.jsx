@@ -84,10 +84,6 @@ class Tasks extends Component {
     this.props.deleteTask(this.props.token, this.props.listId, this.props.id);
   }
   infoClicked() {
-    const listData = this.props.taskList.filter(
-      (l) => this.props.listId === l._id
-    );
-
     const infoTask = {
       taskId: this.props.id,
       listId: this.props.listId,
@@ -95,7 +91,6 @@ class Tasks extends Component {
       description: this.props.description,
       date: this.props.date,
       status: this.props.status,
-      listInput: `${listData[0]._id}|${listData[0].listName}`,
     };
     this.props.clickedTask(infoTask);
     this.routeChange();
