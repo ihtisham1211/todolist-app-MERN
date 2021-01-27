@@ -115,7 +115,7 @@ class EditTask extends Component {
       title: "",
       description: "",
       list: this.props.taskData.listInput,
-      listId: "",
+      listId: this.props.taskData.listId,
       listName: "",
     };
     this.onChange = this.onChange.bind(this);
@@ -133,11 +133,11 @@ class EditTask extends Component {
     });
   }
   onChangeSelect(e) {
-    const listData = e.target.value.split("|");
+    const listData1 = e.target.value.split("|");
     this.setState({
       list: e.target.value,
-      listId: listData[0],
-      listName: listData[1],
+      listId: listData1[0],
+      listName: listData1[1],
     });
   }
 
@@ -150,11 +150,10 @@ class EditTask extends Component {
         selectedDateNTime: this.props.taskData.date,
         title: this.props.taskData.title,
         description: this.props.taskData.description,
-        list: `${listData[0]._id}|${listData[0].listName}`,
-        listId: listData[0]._id,
         listName: listData[0].listName,
       });
     }
+    console.error = () => {};
   }
 
   onSubmit(e) {
@@ -212,9 +211,9 @@ class EditTask extends Component {
             />
 
             <FormControl>
-              <InputLabel shrink>List</InputLabel>
+              <InputLabel>List</InputLabel>
               <Select
-                value={this.state.list ? this.state.list : " "}
+                value={this.state.list ? this.state.list : ""}
                 onChange={(e) => this.onChangeSelect(e)}
               >
                 {this.props.taskList.map((list) => {
