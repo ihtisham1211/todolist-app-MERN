@@ -20,7 +20,7 @@ const ListBody = styled.div`
   &:hover {
     opacity: 0.7;
   }
-
+  cursor: pointer;
   display: flex;
   height: 5vh;
   padding: 1vh;

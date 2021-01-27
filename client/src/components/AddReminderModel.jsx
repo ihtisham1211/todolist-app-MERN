@@ -66,7 +66,9 @@ const FormBody = styled.form`
     overflow: scroll;
     scrollbar-width: none;
   }
-
+  &::-webkit-scrollbar {
+    display: none;
+  }
   display: flex;
   flex-direction: column;
   padding: 1.5vh;

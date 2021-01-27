@@ -82,6 +82,9 @@ const ListName = styled.h1`
   font-size: 4.5vh;
 `;
 const TaskList = styled.div`
+  &::-webkit-scrollbar {
+    display: none;
+  }
   display: flex;
   flex-direction: column;
   margin: 2vh 0 0 0.2vh;

@@ -17,8 +17,8 @@ const AlertM = ({ alerts }) =>
   alerts !== null &&
   alerts.length > 0 &&
   alerts.map((alert) => (
-    <ThemeProvider theme={theme}>
-      <Alert key={uuid()}  severity={alert.alertType}>
+    <ThemeProvider key={uuid()} theme={theme}>
+      <Alert key={uuid()} severity={alert.alertType}>
         {alert.msg}
       </Alert>
     </ThemeProvider>

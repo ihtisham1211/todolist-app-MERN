@@ -57,6 +57,9 @@ const FormBody = styled.form`
     overflow: scroll;
     scrollbar-width: none;
   }
+  &::-webkit-scrollbar {
+    display: none;
+  }
   display: flex;
   flex-direction: column;
   padding: 1.5vh;
@@ -111,7 +114,7 @@ class EditTask extends Component {
       selectedDateNTime: "",
       title: "",
       description: "",
-      list: "600fbf9f4009e300243eb737|Killers",
+      list: this.props.taskData.listInput,
       listId: "",
       listName: "",
     };
@@ -147,11 +150,10 @@ class EditTask extends Component {
         selectedDateNTime: this.props.taskData.date,
         title: this.props.taskData.title,
         description: this.props.taskData.description,
-        list: `${this.props.taskData.listId}|${listData[0].listName}`,
-        listId: this.props.taskData.listId,
+        list: `${listData[0]._id}|${listData[0].listName}`,
+        listId: listData[0]._id,
         listName: listData[0].listName,
       });
-      console.log(`${this.props.taskData.listId}|${listData[0].listName}`);
     }
   }
 
@@ -215,7 +217,7 @@ class EditTask extends Component {
                 value={this.state.list ? this.state.list : " "}
                 onChange={(e) => this.onChangeSelect(e)}
               >
-                {this.props.taskList.map((list, index) => {
+                {this.props.taskList.map((list) => {
                   var setVal = list._id + "|" + list.listName;
                   return (
                     <MenuItem key={uuid()} value={setVal}>

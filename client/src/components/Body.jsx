@@ -177,6 +177,9 @@ const ListConatiner = styled.div`
   &:last-child {
     border: none;
   }
+  &::-webkit-scrollbar {
+    display: none;
+  }
   display: flex;
   flex-direction: column;
   background-color: #3b3b3b;
