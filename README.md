@@ -1,11 +1,11 @@
 # todolist-app-MERN
-A todo list app build on MERN stack with admin and employee panel. The front-end is built using SCSS. Redux used for state management. Backend using express.js and MongoDB with JWT web token and Bycrypt. 
+A todo list app build on MERN stack with admin and employee panel. The front-end is built using styled components. Redux used for state management. Backend using express.js and MongoDB with JWT web token and Bycrypt. 
 
 
 ![Imgur](https://i.imgur.com/9JbZ2xU.gif)
 
 # Front-end build:
-The front-end is built using SCSS.
+The front-end is built using styled components.
 Redux used for state management.
 
 # Backend build:
